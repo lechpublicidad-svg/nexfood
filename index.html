@@ -128,6 +128,28 @@
   .product-card .pname { font-size: 11px; font-weight: 500; line-height: 1.3; flex: 1; }
   .product-card .pprice { font-size: 12px; font-weight: 700; color: var(--gold); white-space: nowrap; }
 
+  /* NOTA */
+  .nota-section {
+    background: var(--card); border: 2px solid var(--gold);
+    border-radius: 10px; margin-bottom: 16px; overflow: hidden;
+    box-shadow: 0 0 16px rgba(245,166,35,0.25);
+  }
+  .nota-title {
+    background: linear-gradient(90deg, #3a1f00, #5a3200);
+    padding: 11px 16px; font-family: 'Bebas Neue'; font-size: 15px;
+    letter-spacing: 2px; color: var(--gold); border-bottom: 2px solid var(--gold);
+    display: flex; align-items: center; gap: 8px;
+  }
+  #notaTexto {
+    background: #1a1000 !important; border: none !important;
+    border-radius: 0 !important; color: #FFD580 !important;
+    font-size: 13px !important; width: 100%; padding: 12px 14px !important;
+    min-height: 70px; box-shadow: none !important;
+    font-family: 'DM Sans'; resize: vertical;
+  }
+  #notaTexto::placeholder { color: rgba(245,166,35,0.45); }
+  #notaTexto:focus { outline: none !important; box-shadow: none !important; }
+
   /* CLIENTES GUARDADOS */
   .clientes-panel {
     background: var(--card); border: 1px solid var(--border);
@@ -331,6 +353,12 @@
         </div>
         <button class="btn-manual" onclick="agregarManual()">➕ AGREGAR AL PEDIDO</button>
       </div>
+    </div>
+
+    <!-- NOTA -->
+    <div class="nota-section">
+      <div class="nota-title">⚠️ NOTA / ANOTACIÓN ADICIONAL</div>
+      <textarea id="notaTexto" placeholder="Ej: Sin salsa, traer cambio de 50€, entregar en recepción, chicharrón muy crocante..."></textarea>
     </div>
 
     <!-- CARTA -->
@@ -1247,6 +1275,24 @@ function generarTirilla() {
     y+=14;
     if(idx<pedido.length-1){sepDot(y);y+=8;}
   });
+
+  // ── NOTA ──
+  if (notaTexto) {
+    y+=5;sepLine(y,0.5,180);y+=5;
+    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(180,80,0);
+    doc.text('⚠ NOTA:',M,y+8);
+    doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(40,40,40);
+    // Wrap nota
+    const notaWords = notaTexto.split(' ');
+    let notaLine = '', notaY = y+8;
+    notaWords.forEach(w => {
+      const test = (notaLine+' '+w).trim();
+      if (doc.getTextWidth(test) < W-M*2-30) { notaLine=test; }
+      else { doc.text(notaLine, M+30, notaY); notaY+=11; notaLine=w; }
+    });
+    if (notaLine) doc.text(notaLine, M+30, notaY);
+    y = notaY + 8;
+  }
 
   // ── TOTALES ──
   y+=5;sepLine(y);y+=8;
