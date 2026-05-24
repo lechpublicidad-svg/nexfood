@@ -1140,19 +1140,23 @@ function generarTirilla() {
   const conDom=document.getElementById('domToggle').checked;
 
   // Validación con opción de continuar
+  // ── VALIDACIÓN: solo bloquea sin productos ──
+  if (!pedido.length) {
+    alert('❌ Agrega al menos un producto para generar la tirilla.');
+    return;
+  }
+
+  // Advertencias opcionales — avisa pero permite continuar
   const advertencias = [];
-  if (!cliente) advertencias.push('👤 Nombre del cliente');
+  if (!cliente)   advertencias.push('👤 Nombre del cliente');
   if (!direccion) advertencias.push('🏠 Dirección de entrega');
-  if (!cp) advertencias.push('📮 Código postal');
-  if (!pago) advertencias.push('💳 Método de pago');
-  if (!pedido.length) advertencias.push('🛒 No hay productos en el pedido');
+  if (!cp)        advertencias.push('📮 Código postal');
+  if (!pago)      advertencias.push('💳 Método de pago');
 
   if (advertencias.length > 0) {
-    const esCritico = !pedido.length; // Sin productos es crítico, lo demás es advertencia
-    const msg = (esCritico ? '❌ DATOS FALTANTES (crítico):\n' : '⚠️ Datos incompletos:\n') +
+    const msg = '⚠️ Faltan estos datos:\n\n' +
       advertencias.map(a => '  • ' + a).join('\n') +
-      (esCritico ? '\n\nAgrega al menos un producto para continuar.' : '\n\n¿Generar la tirilla de todas formas?');
-    if (esCritico) { alert(msg); return; }
+      '\n\n¿Generar la tirilla de todas formas?';
     if (!confirm(msg)) return;
   }
 
@@ -1336,5 +1340,10 @@ function generarTirilla() {
 
 document.addEventListener("DOMContentLoaded", init);
 </script>
+  <footer style="text-align:center; padding: 18px 0 12px; margin-top: 10px; border-top: 1px solid var(--border);">
+    <span style="font-size:11px; color: var(--muted); letter-spacing:1px; font-family:'DM Sans';">
+      MiniApp Diseñada Por: <a href="https://instagram.com/lechpublicidad" target="_blank" style="color:var(--gold); text-decoration:none; font-weight:600;">@lechpublicidad</a>
+    </span>
+  </footer>
 </body>
 </html>
