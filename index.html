@@ -893,6 +893,53 @@ function checkCP(val) {
   drawHeader();
 })();
 
+// ── SONIDOS WEB AUDIO API ──────────────────────────────────
+function sonidoAgregarProducto() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.18);
+  } catch(e) {}
+}
+
+function sonidoGenerarTirilla() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notas = [
+      {f:523, t:0.00, dur:0.09},
+      {f:659, t:0.10, dur:0.09},
+      {f:784, t:0.20, dur:0.09},
+      {f:1047,t:0.30, dur:0.18},
+    ];
+    notas.forEach(({f,t,dur}) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine';
+      o.frequency.setValueAtTime(f, ctx.currentTime + t);
+      g.gain.setValueAtTime(0.3, ctx.currentTime + t);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + dur);
+      o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + dur + 0.01);
+    });
+    // Ding final
+    const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    o2.connect(g2); g2.connect(ctx.destination);
+    o2.type = 'triangle';
+    o2.frequency.setValueAtTime(1400, ctx.currentTime + 0.50);
+    g2.gain.setValueAtTime(0.4, ctx.currentTime + 0.50);
+    g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.0);
+    o2.start(ctx.currentTime + 0.50); o2.stop(ctx.currentTime + 1.01);
+  } catch(e) {}
+}
+// ────────────────────────────────────────────────────────────
+
+
 function init() {
   const cats = ['TODO', ...new Set(catalogo.map(p => p.cat))];
   const tabsEl = document.getElementById('catTabs');
@@ -924,6 +971,25 @@ function init() {
   });
   renderProducts();
   updateTotals();
+
+  // ── PERSISTENCIA localStorage ──────────────────────────
+  const NF_CAMPOS = ['cliente','movil','hotel','habitacion','pago','direccion','cp','notaExtra','ticketNum'];
+  // Cargar datos guardados al iniciar
+  NF_CAMPOS.forEach(id => {
+    const val = localStorage.getItem('nf_' + id);
+    const el  = document.getElementById(id);
+    if (val !== null && el) el.value = val;
+  });
+  try {
+    const nfP = localStorage.getItem('nf_pedido');
+    if (nfP) { const p=JSON.parse(nfP); if(Array.isArray(p)&&p.length){pedido=p;renderOrder();} }
+  } catch(e){}
+  // Guardar en cada cambio
+  NF_CAMPOS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    ['input','change'].forEach(ev => el.addEventListener(ev, () => localStorage.setItem('nf_'+id, el.value)));
+  });
 }
 
 // ── RENDER PRODUCTOS ──
@@ -979,8 +1045,10 @@ function changeCardQty(nombre, delta, precio) {
     ex.qty += delta;
     if (ex.qty <= 0) pedido = pedido.filter(i => i.nombre!==nombre);
   } else if (delta > 0) {
-    pedido.push({nombre, precio, qty:1, manual:false});
+    const prodCat = catalogo.find(p => p.nombre === nombre);
+    pedido.push({nombre, precio, qty:1, manual:false, cat: prodCat ? prodCat.cat : ''});
   }
+  if (delta > 0) sonidoAgregarProducto();
   renderProducts(); renderOrder();
 }
 
@@ -1230,6 +1298,9 @@ function resetPedido() {
   document.getElementById('manualQty').value='1';
   document.getElementById('domToggle').checked=true;
   document.getElementById('cpAlerta').style.display='none';
+  // Limpiar localStorage
+  ['nf_pedido','nf_cliente','nf_movil','nf_hotel','nf_habitacion',
+   'nf_pago','nf_direccion','nf_cp','nf_notaExtra','nf_ticketNum'].forEach(k=>localStorage.removeItem(k));
   renderOrder(); renderProducts();
 }
 
@@ -1249,11 +1320,6 @@ function generarTirilla() {
     alert('⚠️ No puedes generar la tirilla.\n\nEl cliente pidió productos que no has seleccionado aún:\n' + pendientesAmbiguos.map(p => '   • ' + p).join('\n') + '\n\nSelecciónalos manualmente en la carta antes de continuar.');
     return;
   }
-  if (!cliente)  { alert('⚠️ Falta el nombre del cliente'); return; }
-  if (!direccion){ alert('⚠️ Falta la dirección'); return; }
-  if (!cp)       { alert('⚠️ Falta el código postal'); return; }
-  if (!pago)     { alert('⚠️ Falta el método de pago'); return; }
-  if (!pedido.length){ alert('⚠️ No hay productos en el pedido'); return; }
 
   const { jsPDF } = window.jspdf;
 
@@ -1466,6 +1532,7 @@ function generarTirilla() {
   document.getElementById('ticketNum').value = next;
   document.getElementById('headerTicket').textContent = 'TICKET #' + next;
 
+  sonidoGenerarTirilla();
   doc.save(`TIRILLA_${cliente.replace(/ /g,'_')}_${ticket}.pdf`);
 }
 
