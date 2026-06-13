@@ -8,18 +8,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --red:    #D90429;
-  --red2:   #ff1744;
-  --blue:   #0A3D91;
-  --blue2:  #1456c0;
-  --amber:  #B45309;
-  --amber2: #d97706;
-  --bg:     #EEF2FA;
-  --white:  #FFFFFF;
-  --surf2:  #F0F4FA;
-  --border: #C7D9F5;
-  --text:   #0D1B3E;
-  --muted:  #607090;
+  /* Colores sección */
+  --cyan:      #0EA5E9;  --cyan2:   #0369A1;  --cyan-lt:  #E0F2FE;
+  --verde:     #10B981;  --verde2:  #047857;  --verde-lt: #D1FAE5;
+  --naranja:   #F97316;  --naranja2:#C2410C;  --naranja-lt:#FFF7ED;
+  --emp:       #059669;  --emp2:    #065F46;  --emp-lt:   #ECFDF5;
+  --morado:    #7C3AED;  --morado2: #4C1D95;  --morado-lt:#EDE9FE;
+  --red:       #D90429;  --red2:    #ff1744;  --red-lt:   #FEF2F2;
+  /* Sistema */
+  --blue:   #0A3D91;  --blue2:  #1456c0;
+  --amber:  #B45309;  --amber2: #d97706;
+  --bg:     #EEF2FA;  --white:  #FFFFFF;
+  --surf2:  #F0F4FA;  --border: #C7D9F5;
+  --text:   #0D1B3E;  --muted:  #607090;
   --green:  #1A9E5C;
   --shadow: 0 2px 8px rgba(10,61,145,.10);
 }
@@ -40,8 +41,8 @@ header span { font-size:11px; color:rgba(255,255,255,.75); letter-spacing:2px; t
 .container { display:grid; grid-template-columns:1fr 360px; gap:20px; max-width:1200px; margin:0 auto; padding:20px; }
 
 /* SECCIÓN */
-.section { background:var(--white); border:1.5px solid var(--border); border-radius:10px; margin-bottom:16px; overflow:hidden; box-shadow:var(--shadow); }
-.section-title { background:linear-gradient(90deg,var(--blue) 0%,var(--blue2) 100%); padding:12px 16px; font-family:'Bebas Neue'; font-size:16px; letter-spacing:2px; color:#fff; display:flex; align-items:center; gap:8px; }
+.section { background:var(--white); border:1.5px solid var(--border); border-radius:10px; margin-bottom:16px; overflow:hidden; box-shadow:var(--shadow); transition:box-shadow .2s; }
+.section-title { background:linear-gradient(135deg,var(--blue2),var(--blue)); padding:15px 18px; font-family:'Bebas Neue'; font-size:16px; letter-spacing:2.5px; color:#fff; display:flex; align-items:center; gap:8px; }
 .section-title.amber { background:linear-gradient(90deg,var(--amber),var(--amber2)); }
 .section-title.rojo { background:linear-gradient(90deg,var(--red),var(--red2)); font-size:22px; letter-spacing:4px; justify-content:center; padding:16px; }
 .section-body { padding:16px; }
@@ -65,13 +66,13 @@ textarea { resize:vertical; min-height:82px; line-height:1.5; }
 
 /* PASTE */
 .paste-hint { font-size:12px; color:var(--muted); margin-top:8px; line-height:1.55; background:var(--surf2); padding:8px 12px; border-radius:6px; border-left:3px solid var(--blue); }
-.btn-parse { width:100%; padding:11px; background:var(--blue); color:#fff; border:none; border-radius:7px; font-family:'Bebas Neue'; font-size:16px; letter-spacing:2px; cursor:pointer; margin-top:12px; transition:all .2s; box-shadow:0 2px 8px rgba(10,61,145,.25); }
-.btn-parse:hover { background:#082e6e; transform:translateY(-1px); }
+.btn-parse { width:100%; padding:13px; background:linear-gradient(135deg,#0369A1,#0EA5E9); color:#fff; border:none; border-radius:8px; font-family:'Bebas Neue'; font-size:17px; letter-spacing:2px; cursor:pointer; margin-top:12px; box-shadow:0 3px 14px rgba(14,165,233,.35); transition:all .2s; box-shadow:0 2px 8px rgba(10,61,145,.25); }
+.btn-parse:hover { background:#0369A1; transform:translateY(-2px); box-shadow:0 6px 20px rgba(14,165,233,.45); }
 
 /* MANUAL */
 .manual-grid { display:grid; grid-template-columns:1fr 90px 65px; gap:8px; align-items:end; }
-.btn-manual { padding:11px; background:#FFF8EC; color:var(--amber); border:1.5px solid #FDE68A; border-radius:7px; font-family:'Bebas Neue'; font-size:16px; letter-spacing:2px; cursor:pointer; margin-top:12px; width:100%; transition:all .2s; }
-.btn-manual:hover { background:#FDE68A; transform:translateY(-1px); }
+.btn-manual { padding:12px; background:linear-gradient(135deg,#4C1D95,#7C3AED); color:#fff; border:none; border-radius:8px; font-family:'Bebas Neue'; font-size:16px; letter-spacing:2px; cursor:pointer; margin-top:12px; width:100%; transition:all .2s; }
+.btn-manual:hover { background:#4C1D95; transform:translateY(-2px); box-shadow:0 6px 20px rgba(124,58,237,.4); }
 
 /* CATEGORÍAS */
 .cat-tabs { display:flex; flex-wrap:wrap; gap:6px; padding:12px 16px; border-bottom:1px solid var(--border); background:var(--surf2); }
@@ -274,6 +275,22 @@ header span {
   animation-play-state: paused;
 }
 
+
+/* ── Identidad visual por sección ─────────────────────── */
+.sec-cyan    { border-color:#0EA5E9 !important; }
+.sec-verde   { border-color:#10B981 !important; }
+.sec-naranja { border-color:#F97316 !important; }
+.sec-emp     { border-color:#059669 !important; }
+.sec-morado  { border-color:#7C3AED !important; }
+.sec-rojo    { border-color:#D90429 !important; }
+/* Input focus por sección */
+.sec-cyan  input:focus, .sec-cyan  textarea:focus  { border-color:#0EA5E9 !important; box-shadow:0 0 0 3px rgba(14,165,233,.15) !important; }
+.sec-verde input:focus, .sec-verde textarea:focus   { border-color:#10B981 !important; box-shadow:0 0 0 3px rgba(16,185,129,.15) !important; }
+.sec-morado input:focus, .sec-morado textarea:focus { border-color:#7C3AED !important; box-shadow:0 0 0 3px rgba(124,58,237,.15) !important; }
+.sec-emp input:focus, .sec-emp textarea:focus       { border-color:#059669 !important; box-shadow:0 0 0 3px rgba(5,150,105,.15) !important; }
+/* Botón empleado verde oscuro */
+.btn-emp { background:linear-gradient(135deg,#065F46,#059669) !important; color:#fff !important; border:none !important; box-shadow:0 3px 12px rgba(5,150,105,.3) !important; }
+.btn-emp:hover { background:#065F46 !important; transform:translateY(-2px) !important; box-shadow:0 6px 18px rgba(5,150,105,.4) !important; }
 </style>
 </head>
 <body>
@@ -324,8 +341,8 @@ header span {
   <div>
 
     <!-- PEGAR DATOS -->
-    <div class="section">
-      <div class="section-title">📋 Pegar Mensaje del Cliente</div>
+    <div class="section sec-cyan">
+      <div class="section-title" style="background:linear-gradient(135deg,#0369A1,#0EA5E9);">📋 Pegar Mensaje del Cliente</div>
       <div class="section-body">
         <div class="form-group full">
           <label>Copia y pega el mensaje completo aquí</label>
@@ -337,8 +354,8 @@ header span {
     </div>
 
     <!-- DATOS CLIENTE -->
-    <div class="section">
-      <div class="section-title">👤 Datos del Cliente</div>
+    <div class="section sec-verde">
+      <div class="section-title" style="background:linear-gradient(135deg,#047857,#10B981);">👤 Datos del Cliente</div>
       <div class="section-body">
         <div class="form-grid">
           <div class="form-group"><label>Nombre *</label><input type="text" id="cliente" placeholder="Nombre completo"></div>
@@ -372,8 +389,8 @@ header span {
     </div>
 
     <!-- OTRO PRODUCTO EMPLEADO -->
-    <div class="section" id="secEmpleado" style="display:none;">
-      <div class="section-title" style="background:linear-gradient(135deg,#B45309,#F97316);letter-spacing:1.5px;">
+    <div class="section sec-emp" id="secEmpleado" style="display:none;">
+      <div class="section-title" style="background:linear-gradient(135deg,#065F46,#059669);letter-spacing:1.5px;">
         👷 OTRO PRODUCTO EMPLEADO
       </div>
       <div class="section-body">
@@ -383,13 +400,13 @@ header span {
           <div class="form-group"><label>Precio €</label><input type="number" id="empPrecio" placeholder="0.00" step="0.01" min="0"></div>
           <div class="form-group"><label>Cant.</label><input type="number" id="empQty" value="1" min="1"></div>
         </div>
-        <button class="btn-manual" style="background:linear-gradient(135deg,#EA580C,#FB923C);color:#fff;box-shadow:0 3px 10px rgba(234,88,12,.3);font-weight:800;" onclick="agregarEmpleado()">👷 AGREGAR PRODUCTO EMPLEADO</button>
+        <button class="btn-manual" class="btn-emp" onclick="agregarEmpleado()">👷 AGREGAR PRODUCTO EMPLEADO</button>
       </div>
     </div>
 
     <!-- PRODUCTO MANUAL -->
-    <div class="section">
-      <div class="section-title amber">➕ Agregar Producto No Incluido en Carta</div>
+    <div class="section sec-morado">
+      <div class="section-title" style="background:linear-gradient(135deg,#4C1D95,#7C3AED);">➕ Agregar Producto No Incluido en Carta</div>
       <div class="section-body">
         <div class="manual-grid">
           <div class="form-group"><label>Nombre del Producto</label><input type="text" id="manualNombre" placeholder="Ej: Tortilla con bacon"></div>
@@ -404,7 +421,7 @@ header span {
 
   <!-- COLUMNA DERECHA -->
   <div>
-    <div class="section" style="position:sticky;top:75px;">
+    <div class="section sec-rojo" style="position:sticky;top:75px;">
       <div class="section-title rojo">🧾 PEDIDO</div>
       <div class="ticket-num-input">
         <span>Nº Ticket:</span>
@@ -957,6 +974,9 @@ function init() {
       catActiva = cat;
       document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      // Limpiar buscador al cambiar categoría
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = '';
       // Mostrar sección empleado solo cuando está en EMPLEADOS
       const secEmp = document.getElementById('secEmpleado');
       if (secEmp) secEmp.style.display = cat === 'EMPLEADOS' ? 'block' : 'none';
