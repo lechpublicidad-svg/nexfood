@@ -60,7 +60,7 @@ input,select,textarea {
 }
 input:focus,select:focus,textarea:focus { outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(10,61,145,.12); }
 textarea { resize:vertical; min-height:82px; line-height:1.5; }
-#notaExtra { border:2px solid var(--red) !important; background:#FFF5F5 !important; }
+#notaExtra { border:2px solid #F59E0B !important; background:#FFFBEB !important; }
 #notaExtra:focus { box-shadow:0 0 0 3px rgba(217,4,41,.15) !important; border-color:var(--red) !important; }
 #notaExtra::placeholder { color:#C0707A; }
 
@@ -277,54 +277,87 @@ header span {
 
 
 /* ── Identidad visual por sección ─────────────────────── */
-.sec-cyan    { border-color:#0EA5E9 !important; }
-.sec-verde   { border-color:#10B981 !important; }
-.sec-naranja { border-color:#F97316 !important; }
-.sec-emp     { border-color:#059669 !important; }
-.sec-morado  { border-color:#7C3AED !important; }
-.sec-rojo    { border-color:#D90429 !important; }
+.sec-cyan    { border:4px solid #0EA5E9 !important; box-shadow:0 0 0 1px rgba(14,165,233,.2), 0 4px 16px rgba(14,165,233,.15) !important; }
+.sec-verde   { border:4px solid #10B981 !important; box-shadow:0 0 0 1px rgba(16,185,129,.2), 0 4px 16px rgba(16,185,129,.15) !important; }
+.sec-naranja { border:4px solid #F97316 !important; box-shadow:0 0 0 1px rgba(249,115,22,.2), 0 4px 16px rgba(249,115,22,.15) !important; }
+.sec-emp     { border:4px solid #059669 !important; box-shadow:0 0 0 1px rgba(5,150,105,.2), 0 4px 16px rgba(5,150,105,.15) !important; }
+.sec-morado  { border:4px solid #7C3AED !important; box-shadow:0 0 0 1px rgba(124,58,237,.2), 0 4px 16px rgba(124,58,237,.15) !important; }
+.sec-rojo    { border:4px solid #D90429 !important; box-shadow:0 0 0 1px rgba(217,4,41,.2), 0 4px 16px rgba(217,4,41,.15) !important; }
 /* Input focus por sección */
 .sec-cyan  input:focus, .sec-cyan  textarea:focus  { border-color:#0EA5E9 !important; box-shadow:0 0 0 3px rgba(14,165,233,.15) !important; }
 .sec-verde input:focus, .sec-verde textarea:focus   { border-color:#10B981 !important; box-shadow:0 0 0 3px rgba(16,185,129,.15) !important; }
 .sec-morado input:focus, .sec-morado textarea:focus { border-color:#7C3AED !important; box-shadow:0 0 0 3px rgba(124,58,237,.15) !important; }
 .sec-emp input:focus, .sec-emp textarea:focus       { border-color:#059669 !important; box-shadow:0 0 0 3px rgba(5,150,105,.15) !important; }
 /* Botón empleado verde oscuro */
-.btn-emp { background:linear-gradient(135deg,#065F46,#059669) !important; color:#fff !important; border:none !important; box-shadow:0 3px 12px rgba(5,150,105,.3) !important; }
-.btn-emp:hover { background:#065F46 !important; transform:translateY(-2px) !important; box-shadow:0 6px 18px rgba(5,150,105,.4) !important; }
+.btn-emp { width:100% !important; padding:13px !important; background:linear-gradient(135deg,#065F46,#059669) !important; color:#fff !important; border:none !important; border-radius:8px !important; font-family:'Bebas Neue' !important; font-size:17px !important; letter-spacing:2px !important; cursor:pointer !important; margin-top:12px !important; display:block !important; box-shadow:0 4px 14px rgba(5,150,105,.35) !important; transition:all .2s !important; }
+.btn-emp:hover { background:linear-gradient(135deg,#059669,#065F46) !important; transform:translateY(-2px) !important; box-shadow:0 8px 20px rgba(5,150,105,.45) !important; }
+
+/* ── BUSCADOR CARTA ── */
+#searchInput {
+  background: #EFF6FF !important;
+  border: 2px solid #3B82F6 !important;
+  color: #1E3A5F;
+  border-radius: 10px;
+  font-size: 14px;
+  padding: 11px 16px;
+  width: 100%;
+  transition: all .2s;
+}
+#searchInput:focus {
+  border-color: #1D4ED8 !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.2) !important;
+  background: #DBEAFE !important;
+}
+#searchInput::placeholder { color: #6B8DB5; }
 </style>
 </head>
 <body>
 
-<!-- SPLASH SCREEN ANIMACIÓN DE BIENVENIDA -->
+<!-- SPLASH SCREEN -->
 <div id="splashScreen" style="
   position:fixed;inset:0;z-index:9999;
   background:#0A0008;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  overflow:hidden;
 ">
-  <canvas id="splashCanvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
-  <div id="splashContent" style="position:relative;z-index:2;text-align:center;opacity:0;transform:scale(0.85);">
-    <div id="splashLogo" style="
-      font-family:'Bebas Neue',sans-serif;
-      font-size:72px;letter-spacing:16px;
-      color:#FF1A1A;
-      text-shadow:0 0 30px #FF1A1A,0 0 60px #FF0000,0 0 100px #CC0000;
-      margin-bottom:8px;
-    ">NEXFOOD</div>
-    <div style="
-      font-size:11px;letter-spacing:6px;color:rgba(255,100,100,.7);
-      text-transform:uppercase;font-weight:700;
-      font-family:'Plus Jakarta Sans',sans-serif;
-    ">Sistema de Tirillas · Inicializando...</div>
-    <div id="splashBar" style="
-      width:0%;height:2px;
-      background:linear-gradient(90deg,#FF1A1A,#FF6B6B);
-      box-shadow:0 0 10px #FF1A1A;
-      margin:20px auto 0;max-width:300px;
-      border-radius:2px;
-      transition:width 1.5s ease;
-    "></div>
+  <style>
+    @keyframes splashLogo {
+      0%   { opacity:0; transform:scale(0.7) translateY(20px); }
+      60%  { opacity:1; transform:scale(1.05) translateY(0); }
+      100% { opacity:1; transform:scale(1) translateY(0); }
+    }
+    @keyframes splashSub {
+      0%,40% { opacity:0; transform:translateY(10px); }
+      100%   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes splashBar {
+      0%   { width:0%; }
+      100% { width:100%; }
+    }
+    @keyframes splashFade {
+      0%   { opacity:1; }
+      100% { opacity:0; pointer-events:none; }
+    }
+    #splashLogo  { animation: splashLogo .7s cubic-bezier(.34,1.56,.64,1) forwards; }
+    #splashSub   { animation: splashSub .6s ease .6s forwards; opacity:0; }
+    #splashBar   { animation: splashBar 1.4s ease .4s forwards; }
+    #splashScreen{ animation: splashFade .5s ease 2.6s forwards; }
+  </style>
+  <div id="splashLogo" style="
+    font-family:'Bebas Neue',sans-serif;
+    font-size:76px;letter-spacing:14px;
+    color:#FF2222;
+    text-shadow:0 0 30px #FF2222,0 0 60px rgba(255,0,0,.5);
+  ">NEXFOOD</div>
+  <div id="splashSub" style="
+    font-size:11px;letter-spacing:6px;
+    color:rgba(255,100,100,.7);
+    text-transform:uppercase;font-weight:700;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    margin-top:8px;
+  ">Generador de Tirillas</div>
+  <div style="width:260px;height:2px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:28px;overflow:hidden;">
+    <div id="splashBar" style="height:100%;background:linear-gradient(90deg,#FF2222,#FF6B00);box-shadow:0 0 8px #FF2222;width:0%;border-radius:2px;"></div>
   </div>
 </div>
 
@@ -363,7 +396,7 @@ header span {
           <div class="form-group full"><label>Hotel / Hostal</label><input type="text" id="hotel" placeholder="Nombre del hotel (si aplica)"></div>
           <div class="form-group"><label>Habitación</label><input type="text" id="habitacion" placeholder="Ej: 204"></div>
           <div class="form-group"><label>Método de Pago *</label>
-            <select id="pago"><option value="">-- Seleccionar --</option><option>EFECTIVO</option><option>TARJETA</option><option>BIZUM</option></select>
+            <select id="pago"><option value="">-- Seleccionar --</option><option>EFECTIVO</option><option>TARJETA</option><option>BIZUM</option><option>CRÉDITO</option></select>
           </div>
           <div class="form-group full"><label>Dirección *</label><input type="text" id="direccion" placeholder="Calle, número, piso, puerta"></div>
           <div class="form-group">
@@ -381,10 +414,11 @@ header span {
     </div>
 
     <!-- CARTA -->
-    <div class="section">
-      <div class="section-title">🍽️ Carta de Productos</div>
+    <div class="section sec-naranja">
+      <div class="section-title" style="background:linear-gradient(135deg,#C2410C,#F97316);">🍽️ Carta de Productos</div>
       <div class="cat-tabs" id="catTabs"></div>
-      <div class="search-box"><input type="text" id="searchInput" placeholder="🔍 Buscar producto..."></div>
+      <div class="search-box"><label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#C2410C;font-weight:700;display:block;margin-bottom:6px;">🔍 Buscar Producto</label>
+<input type="text" id="searchInput" placeholder="Escribe el nombre del producto..."></div>
       <div class="products-grid" id="productsGrid"></div>
     </div>
 
@@ -400,12 +434,12 @@ header span {
           <div class="form-group"><label>Precio €</label><input type="number" id="empPrecio" placeholder="0.00" step="0.01" min="0"></div>
           <div class="form-group"><label>Cant.</label><input type="number" id="empQty" value="1" min="1"></div>
         </div>
-        <button class="btn-manual" class="btn-emp" onclick="agregarEmpleado()">👷 AGREGAR PRODUCTO EMPLEADO</button>
+        <button class="btn-emp" onclick="agregarEmpleado()">👷 AGREGAR PRODUCTO EMPLEADO</button>
       </div>
     </div>
 
     <!-- PRODUCTO MANUAL -->
-    <div class="section sec-morado">
+    <div class="section sec-morado" id="secManual">
       <div class="section-title" style="background:linear-gradient(135deg,#4C1D95,#7C3AED);">➕ Agregar Producto No Incluido en Carta</div>
       <div class="section-body">
         <div class="manual-grid">
@@ -751,96 +785,7 @@ function checkCP(val) {
 // SPLASH SCREEN + ANIMACIONES FUTURISTAS
 // ══════════════════════════════════════════
 (function() {
-  // --- Splash Canvas: partículas + láser ---
-  const splash = document.getElementById('splashScreen');
-  const canvas = document.getElementById('splashCanvas');
-  const ctx    = canvas ? canvas.getContext('2d') : null;
-
-  if (!canvas || !ctx) return;
-
-  let W, H, particles = [], lasers = [], raf;
-
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  // Partículas luminosas
-  for (let i = 0; i < 80; i++) {
-    particles.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 1.5 + 0.3,
-      vx: (Math.random() - .5) * .4,
-      vy: (Math.random() - .5) * .4,
-      a: Math.random(),
-      da: (Math.random() * .01 + .005) * (Math.random() < .5 ? 1 : -1),
-    });
-  }
-
-  // Líneas láser
-  for (let i = 0; i < 6; i++) {
-    lasers.push({
-      y: Math.random() * H,
-      vy: (Math.random() - .5) * .6,
-      a: Math.random() * .15 + .05,
-      w: Math.random() * 1.5 + .5,
-    });
-  }
-
-  function drawSplash() {
-    ctx.clearRect(0, 0, W, H);
-
-    // Grid HUD
-    ctx.strokeStyle = 'rgba(255,0,0,0.04)';
-    ctx.lineWidth = .5;
-    for (let x = 0; x < W; x += 40) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-    }
-    for (let y = 0; y < H; y += 40) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-    }
-
-    // Líneas láser
-    lasers.forEach(l => {
-      l.y += l.vy;
-      if (l.y < 0 || l.y > H) l.vy *= -1;
-      const grad = ctx.createLinearGradient(0, l.y, W, l.y);
-      grad.addColorStop(0,   'transparent');
-      grad.addColorStop(0.3, `rgba(255,30,30,${l.a})`);
-      grad.addColorStop(0.7, `rgba(255,80,80,${l.a * .7})`);
-      grad.addColorStop(1,   'transparent');
-      ctx.strokeStyle = grad;
-      ctx.lineWidth   = l.w;
-      ctx.beginPath(); ctx.moveTo(0, l.y); ctx.lineTo(W, l.y); ctx.stroke();
-    });
-
-    // Partículas
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy; p.a += p.da;
-      if (p.a <= 0 || p.a >= 1) p.da *= -1;
-      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,${60 + Math.random()*40},${60 + Math.random()*40},${p.a})`;
-      ctx.fill();
-    });
-
-    // Escaneo central
-    const scanY = (Date.now() % 3000) / 3000 * H;
-    const scanGrad = ctx.createLinearGradient(0, scanY - 30, 0, scanY + 30);
-    scanGrad.addColorStop(0,   'transparent');
-    scanGrad.addColorStop(0.5, 'rgba(255,40,40,0.12)');
-    scanGrad.addColorStop(1,   'transparent');
-    ctx.fillStyle = scanGrad;
-    ctx.fillRect(0, scanY - 30, W, 60);
-
-    raf = requestAnimationFrame(drawSplash);
-  }
-  drawSplash();
+  
 
   // Secuencia de bienvenida
   const content = document.getElementById('splashContent');
@@ -980,6 +925,9 @@ function init() {
       // Mostrar sección empleado solo cuando está en EMPLEADOS
       const secEmp = document.getElementById('secEmpleado');
       if (secEmp) secEmp.style.display = cat === 'EMPLEADOS' ? 'block' : 'none';
+      // Ocultar sección agregar manual cuando EMPLEADOS está activo
+      const secManual = document.getElementById('secManual');
+      if (secManual) secManual.style.display = cat === 'EMPLEADOS' ? 'none' : 'block';
       renderProducts();
     };
     tabsEl.appendChild(btn);
@@ -1551,9 +1499,25 @@ function generarTirilla() {
   const next = parseInt(ticket) + 1;
   document.getElementById('ticketNum').value = next;
   document.getElementById('headerTicket').textContent = 'TICKET #' + next;
+  localStorage.setItem('nf_ticketNum', next);
 
   sonidoGenerarTirilla();
   doc.save(`TIRILLA_${cliente.replace(/ /g,'_')}_${ticket}.pdf`);
+  // Limpiar todo después de generar
+  setTimeout(() => {
+    pedido = [];
+    pendientesAmbiguos = [];
+    ['cliente','movil','hotel','habitacion','direccion','cp','pasteBox','notaExtra'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('pago').value = '';
+    document.getElementById('domToggle').checked = true;
+    document.getElementById('cpAlerta').style.display = 'none';
+    ['nf_pedido','nf_cliente','nf_movil','nf_hotel','nf_habitacion',
+     'nf_pago','nf_direccion','nf_cp','nf_notaExtra'].forEach(k => localStorage.removeItem(k));
+    renderOrder();
+  }, 1200);
 }
 
 init();
