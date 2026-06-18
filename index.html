@@ -875,6 +875,7 @@ const catalogo = [
   {cat:"SANDWICH",nombre:"PATTY SANDWICH",precio:9.50},
   {cat:"SANDWICH",nombre:"BACON & EGG SANDWICH",precio:9.50},
   {cat:"SANDWICH",nombre:"CHICKEN MEX SANDWICH",precio:9.50},
+  {cat:"SANDWICH",nombre:"BACON & CHEESE SANDWICH",precio:9.50},
   {cat:"SANDWICH",nombre:"BBQ CHICKEN SANDWICH",precio:9.50},
   {cat:"REFRESCOS",nombre:"COCA COLA ORIGINAL LATA 330ML",precio:2.00},
   {cat:"REFRESCOS",nombre:"COCA-COLA ZERO LATA 330ML",precio:2.00},
@@ -1177,15 +1178,24 @@ function checkCP(val) {
 function sonidoAgregarProducto() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
-    gain.gain.setValueAtTime(0.25, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
-    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.18);
+    // Sonido tipo pitazo de árbitro / gol
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.4, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const t = i / ctx.sampleRate;
+      // Silbato corto
+      data[i] = Math.sin(2 * Math.PI * 1800 * t) * Math.exp(-t * 8) * 0.4;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start();
+    // Pequeño bounce del balón al agregar
+    const b = document.getElementById('bounceBall');
+    if (b) {
+      b.style.transform = 'scale(1.4)';
+      setTimeout(() => b.style.transform = 'scale(1)', 150);
+    }
   } catch(e) {}
 }
 
@@ -1890,6 +1900,112 @@ function gol() {
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.querySelector('.btn-generar');
   if (btn) btn.addEventListener('click', () => setTimeout(gol, 900));
+});
+
+</script>
+
+<!-- BALÓN REBOTANDO -->
+<div id="bounceBall" style="
+  position:fixed;
+  z-index:8990;
+  pointer-events:none;
+  width:36px;
+  height:36px;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+  opacity:0.75;
+">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+    <circle cx="50" cy="50" r="48" fill="white" stroke="#222" stroke-width="2"/>
+    <polygon points="50,8 62,22 56,38 44,38 38,22" fill="#111"/>
+    <polygon points="92,35 80,28 76,42 85,52 97,48" fill="#111"/>
+    <polygon points="82,72 70,65 68,78 78,86 90,80" fill="#111"/>
+    <polygon points="50,92 38,85 40,72 52,68 62,75 62,88" fill="#111"/>
+    <polygon points="18,72 10,80 22,86 32,78 30,65" fill="#111"/>
+    <polygon points="8,35 3,48 15,52 24,42 20,28" fill="#111"/>
+  </svg>
+</div>
+
+<!-- GOL ANIMACIÓN -->
+<div id="golText" style="
+  position:fixed;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  z-index:9998;
+  pointer-events:none;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:100px;
+  color:#FFD700;
+  text-shadow:0 0 30px #FFD700,0 0 60px rgba(255,215,0,0.5),0 4px 8px rgba(0,0,0,0.8);
+  letter-spacing:8px;
+  opacity:0;
+  transition:none;
+">¡GOL!</div>
+
+
+<script>
+
+// ── BALÓN REBOTANDO ─────────────────────────
+(function(){
+  const ball = document.getElementById('bounceBall');
+  if (!ball) return;
+
+  let x = 80, y = 200;
+  let vx = 3.2, vy = 2.6;
+  let angle = 0;
+  const SIZE = 36;
+
+  function W(){ return window.innerWidth; }
+  function H(){ return window.innerHeight; }
+
+  function moveBall(){
+    x += vx; y += vy; angle += 2;
+
+    // Rebotar en bordes
+    if (x <= 0)        { x = 0;        vx = Math.abs(vx); }
+    if (x >= W()-SIZE) { x = W()-SIZE; vx = -Math.abs(vx); }
+    if (y <= 0)        { y = 0;        vy = Math.abs(vy); }
+    if (y >= H()-SIZE) { y = H()-SIZE; vy = -Math.abs(vy); }
+
+    ball.style.left      = x + 'px';
+    ball.style.top       = y + 'px';
+    ball.style.transform = `rotate(${angle}deg)`;
+
+    requestAnimationFrame(moveBall);
+  }
+  moveBall();
+})();
+
+// ── GOL ANIMACIÓN AL GENERAR ─────────────────
+function mostrarGol() {
+  const g = document.getElementById('golText');
+  if (!g) return;
+  g.style.transition = 'none';
+  g.style.opacity = '1';
+  g.style.transform = 'translate(-50%,-50%) scale(0)';
+  void g.offsetWidth;
+  g.style.transition = 'transform .4s cubic-bezier(.34,1.56,.64,1), opacity .3s ease 1.2s';
+  g.style.transform = 'translate(-50%,-50%) scale(1)';
+  setTimeout(()=>{ g.style.opacity='0'; }, 1200);
+  setTimeout(()=>{ g.style.transform='translate(-50%,-50%) scale(0)'; g.style.transition='none'; }, 1600);
+  // Sonido fanfarria gol
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notas = [{f:523,t:0},{f:659,t:0.1},{f:784,t:0.2},{f:1047,t:0.3},{f:1047,t:0.45},{f:1047,t:0.6}];
+    notas.forEach(({f,t})=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type='square'; o.frequency.value=f;
+      g.gain.setValueAtTime(0.2, ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+t+0.18);
+      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.2);
+    });
+  } catch(e){}
+}
+
+// Enganchar GOL al botón generar
+document.addEventListener('DOMContentLoaded', ()=>{
+  const btn = document.querySelector('.btn-generar');
+  if (btn) btn.addEventListener('click', ()=> setTimeout(mostrarGol, 500));
 });
 
 </script>
