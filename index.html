@@ -705,18 +705,19 @@ footer {
     </div>
 
     <!-- DATOS CLIENTE -->
+    <div class="section" style="border:4px solid #D97706;box-shadow:0 0 0 1px rgba(217,119,6,.2),0 4px 16px rgba(217,119,6,.15);">
+      <div class="section-title" style="background:linear-gradient(135deg,#92400E,#D97706);cursor:pointer;" onclick="toggleClientesGuardados()">
+        <span style="flex:1;">⭐ Clientes Guardados (<span id="cfCount">0</span>)</span>
+        <span id="cgArrow">▼</span>
+      </div>
+      <div class="section-body" id="clientesGuardadosBody" style="display:none;">
+        <div id="listaClientesFrecuentes"></div>
+      </div>
+    </div>
+
     <div class="section sec-verde">
       <div class="section-title" style="background:linear-gradient(135deg,#047857,#10B981);">👤 Datos del Cliente</div>
       <div class="section-body">
-        <div class="form-group full" style="margin-bottom:14px;">
-          <label style="color:#047857;">⭐ Cliente Frecuente</label>
-          <div style="display:flex;gap:8px;">
-            <select id="clienteFrecuente" style="flex:1;border-color:#10B981;" onchange="cargarClienteFrecuente()">
-              <option value="">-- Nuevo cliente / Seleccionar --</option>
-            </select>
-            <button type="button" onclick="eliminarClienteFrecuente()" style="background:#FEE2E2;color:#DC2626;border:1.5px solid #FCA5A5;border-radius:8px;padding:0 14px;cursor:pointer;font-size:16px;" title="Eliminar cliente seleccionado">🗑️</button>
-          </div>
-        </div>
         <div class="form-grid">
           <div class="form-group"><label>Nombre *</label><input type="text" id="cliente" placeholder="Nombre completo"></div>
           <div class="form-group"><label>Móvil</label><input type="text" id="movil" placeholder="+34 600 000 000"></div>
@@ -732,11 +733,7 @@ footer {
             <div id="cpAlerta">🚫 ZONA NO PERMITIDA — No se entrega en Fuencarral-El Pardo (28048) por distancia.</div>
           </div>
           <div class="form-group"><label>Ciudad</label><input type="text" id="ciudad" value="Madrid"></div>
-          <div class="form-group full">
-            <label class="nota-label">⚠️ Nota / Anotación Adicional</label>
-            <input type="text" id="notaExtra" placeholder="Ej: Sin salsa, traer cambio de 50€, entregar en recepción...">
           </div>
-        </div>
       </div>
     </div>
 
@@ -778,6 +775,13 @@ footer {
       </div>
     </div>
 
+    <div class="section" style="border:4px solid #DB2777;box-shadow:0 0 0 1px rgba(219,39,119,.2),0 4px 16px rgba(219,39,119,.15);">
+      <div class="section-title" style="background:linear-gradient(135deg,#9D174D,#DB2777);">📌 Información Adicional / Cosas Importantes</div>
+      <div class="section-body">
+        <input type="text" id="notaExtra" style="border:2px solid #DB2777;background:#FDF2F8;color:#9D174D;font-weight:600;" placeholder="Ej: Sin salsa, traer cambio de 50€, entregar en recepción, alergias, instrucciones especiales...">
+      </div>
+    </div>
+
   </div>
 
   <!-- COLUMNA DERECHA -->
@@ -802,6 +806,26 @@ footer {
         <button class="btn-generar" onclick="generarTirilla()">🖨️ GENERAR TIRILLA</button>
         <button class="btn-reset" onclick="resetPedido()">Limpiar todo</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="grid-template-columns:1fr;padding-top:0;">
+  <div class="section" style="border:4px solid #D97706;box-shadow:0 0 0 1px rgba(217,119,6,.2),0 4px 16px rgba(217,119,6,.15);">
+    <div class="section-title" style="background:linear-gradient(135deg,#92400E,#D97706);cursor:pointer;" onclick="toggleCrearCliente()">
+      <span style="flex:1;">➕ Crear Cliente</span>
+      <span id="ccArrow">▼</span>
+    </div>
+    <div class="section-body" id="crearClienteBody" style="display:none;">
+      <div class="form-grid">
+        <div class="form-group"><label>Nombre</label><input type="text" id="cfNombre" placeholder="Nombre del cliente"></div>
+        <div class="form-group"><label>Móvil</label><input type="text" id="cfMovil" placeholder="+34 600 000 000"></div>
+        <div class="form-group full"><label>Hotel / Hostal</label><input type="text" id="cfHotel" placeholder="Nombre del hotel (si aplica)"></div>
+        <div class="form-group"><label>Habitación</label><input type="text" id="cfHabitacion" placeholder="Ej: 204"></div>
+        <div class="form-group"><label>Código Postal</label><input type="text" id="cfCp" placeholder="28000"></div>
+        <div class="form-group full"><label>Dirección</label><input type="text" id="cfDireccion" placeholder="Calle, número, piso, puerta"></div>
+      </div>
+      <button type="button" onclick="guardarNuevoClienteFrecuente()" style="width:100%;padding:13px;background:linear-gradient(135deg,#92400E,#D97706);color:#fff;border:none;border-radius:8px;font-family:'Bebas Neue';font-size:17px;letter-spacing:2px;cursor:pointer;margin-top:12px;box-shadow:0 4px 14px rgba(217,119,6,.35);">💾 GUARDAR CLIENTE</button>
     </div>
   </div>
 </div>
@@ -1039,18 +1063,8 @@ const catalogo = [
   {cat:"POSTRES",nombre:"ROSQUILLAS DE QUESO",precio:1.10},
   {cat:"POSTRES",nombre:"SALCHIPAPA",precio:9.99},
   // ESPECIALES
-  {cat:"ESPECIAL",nombre:"BURRITO TERNERA Y POLLO PICANTE",precio:16.50},
-  // EMPLEADOS
-  {cat:"EMPLEADOS",nombre:"GASEOSA 2L EMPLEADOS",precio:2.50},
-  {cat:"EMPLEADOS",nombre:"REDBULL / MONSTER EMPLEADOS",precio:1.25},
-  {cat:"EMPLEADOS",nombre:"COMBO BURGER EMPLEADOS",precio:10.00},
-  {cat:"EMPLEADOS",nombre:"GASEOSA LATA EMPLEADOS",precio:1.20},
-  {cat:"EMPLEADOS",nombre:"HAMBURGUESA DEVOLUCIÓN",precio:5.00},
-  {cat:"EMPLEADOS",nombre:"PICADA EMPLEADOS (TERNERA PECHUGA CHICHARRÓN CHORIZO Y AREPA)",precio:30.00},
-  {cat:"EMPLEADOS",nombre:"COMBO ALITAS EMPLEADO",precio:10.00},
-  {cat:"EMPLEADOS",nombre:"COMBO AROS DE CALAMAR EMPLEADO",precio:10.00},
-  {cat:"EMPLEADOS",nombre:"PATATAS CRIOLLAS Y CHICHARRÓN",precio:12.00},
-  {cat:"EMPLEADOS",nombre:"BOTELLA DE AGUA 500ML EMPLEADOS",precio:1.00},
+  {cat:"ESPECIAL",nombre:"BURRITO TERNERA Y POLLO PICANTE",precio:16.50},  {cat:"EMPLEADOS",nombre:"PIZZA EMPLEADOS",precio:10.00},
+
   // PIZZAS
   {cat:"PIZZA",nombre:"PIZZA MARGHERITA",precio:13.99},
   {cat:"PIZZA",nombre:"PIZZA BBQ POLLO",precio:13.99},
@@ -1064,7 +1078,18 @@ const catalogo = [
   {cat:"PIZZA",nombre:"PIZZA CARBONARA",precio:13.99},
   {cat:"PIZZA",nombre:"PIZZA VEGANA",precio:13.99},
   {cat:"PIZZA",nombre:"PIZZA CALABRESE PICCANTE",precio:13.99},
-  {cat:"EMPLEADOS",nombre:"PIZZA EMPLEADOS",precio:10.00},
+
+  // EMPLEADOS
+  {cat:"EMPLEADOS",nombre:"GASEOSA 2L EMPLEADOS",precio:2.50},
+  {cat:"EMPLEADOS",nombre:"REDBULL / MONSTER EMPLEADOS",precio:1.25},
+  {cat:"EMPLEADOS",nombre:"COMBO BURGER EMPLEADOS",precio:10.00},
+  {cat:"EMPLEADOS",nombre:"GASEOSA LATA EMPLEADOS",precio:1.20},
+  {cat:"EMPLEADOS",nombre:"HAMBURGUESA DEVOLUCIÓN",precio:5.00},
+  {cat:"EMPLEADOS",nombre:"PICADA EMPLEADOS (TERNERA PECHUGA CHICHARRÓN CHORIZO Y AREPA)",precio:30.00},
+  {cat:"EMPLEADOS",nombre:"COMBO ALITAS EMPLEADO",precio:10.00},
+  {cat:"EMPLEADOS",nombre:"COMBO AROS DE CALAMAR EMPLEADO",precio:10.00},
+  {cat:"EMPLEADOS",nombre:"PATATAS CRIOLLAS Y CHICHARRÓN",precio:12.00},
+  {cat:"EMPLEADOS",nombre:"BOTELLA DE AGUA 500ML EMPLEADOS",precio:1.00},
 
 ];
 
@@ -1255,7 +1280,9 @@ function sonidoGenerarTirilla() {
 
 
 function init() {
-  const cats = ['TODO', ...new Set(catalogo.map(p => p.cat))];
+  const catsRaw = ['TODO', ...new Set(catalogo.map(p => p.cat))];
+  // EMPLEADOS siempre al final
+  const cats = catsRaw.filter(c => c !== 'EMPLEADOS').concat(catsRaw.includes('EMPLEADOS') ? ['EMPLEADOS'] : []);
   const tabsEl = document.getElementById('catTabs');
   cats.forEach(cat => {
     const btn = document.createElement('button');
@@ -2065,40 +2092,89 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 </script>
 
+
+
 <script>
 
 // ══════════════════════════════════════════════════════
-// SISTEMA DE CLIENTES FRECUENTES
+// SISTEMA DE CLIENTES FRECUENTES — INDEPENDIENTE
+// Sin restricciones — cualquier cantidad de datos
 // ══════════════════════════════════════════════════════
 function getClientesFrecuentes() {
-  try {
-    return JSON.parse(localStorage.getItem('nf_clientesFrecuentes') || '[]');
-  } catch(e) { return []; }
+  try { return JSON.parse(localStorage.getItem('nf_clientesFrecuentes') || '[]'); }
+  catch(e) { return []; }
 }
 
-function guardarClientesFrecuentes(lista) {
+function guardarListaClientes(lista) {
   localStorage.setItem('nf_clientesFrecuentes', JSON.stringify(lista));
 }
 
-function renderClientesFrecuentes() {
-  const sel = document.getElementById('clienteFrecuente');
-  if (!sel) return;
+function guardarNuevoClienteFrecuente() {
+  const nombre      = document.getElementById('cfNombre').value.trim();
+  const movil       = document.getElementById('cfMovil').value.trim();
+  const hotel       = document.getElementById('cfHotel').value.trim();
+  const habitacion  = document.getElementById('cfHabitacion').value.trim();
+  const cp          = document.getElementById('cfCp').value.trim();
+  const direccion   = document.getElementById('cfDireccion').value.trim();
+
+  // Sin restricciones — guarda con cualquier dato, aunque solo sea uno
+  if (!nombre && !movil && !hotel && !direccion && !cp) {
+    alert('⚠️ Ingresa al menos un dato para guardar el cliente');
+    return;
+  }
+
   const clientes = getClientesFrecuentes();
-  const valorActual = sel.value;
-  sel.innerHTML = '<option value="">-- Nuevo cliente / Seleccionar --</option>';
-  clientes.forEach((c, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = c.nombre + (c.movil ? ' — ' + c.movil : '');
-    sel.appendChild(opt);
+  clientes.push({ nombre, movil, hotel, habitacion, cp, direccion });
+  guardarListaClientes(clientes);
+
+  // Limpiar formulario
+  ['cfNombre','cfMovil','cfHotel','cfHabitacion','cfCp','cfDireccion'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
   });
-  sel.value = valorActual;
+
+  renderListaClientes();
+  if (typeof sonidoAgregarProducto === 'function') sonidoAgregarProducto();
+  // Cerrar el formulario tras guardar
+  const body = document.getElementById('crearClienteBody');
+  const arrow = document.getElementById('ccArrow');
+  if (body) body.style.display = 'none';
+  if (arrow) arrow.textContent = '▼';
+  alert('✅ Cliente guardado correctamente');
 }
 
-function cargarClienteFrecuente() {
-  const sel = document.getElementById('clienteFrecuente');
-  const idx = sel.value;
-  if (idx === '') return;
+function renderListaClientes() {
+  const cont = document.getElementById('listaClientesFrecuentes');
+  const countEl = document.getElementById('cfCount');
+  if (!cont) return;
+  const clientes = getClientesFrecuentes();
+  if (countEl) countEl.textContent = clientes.length;
+
+  if (clientes.length === 0) {
+    cont.innerHTML = '<p style="text-align:center;color:#9CA3AF;font-size:13px;padding:16px;">No hay clientes guardados aún</p>';
+    return;
+  }
+
+  cont.innerHTML = clientes.map((c, i) => {
+    const partes = [];
+    if (c.movil) partes.push('📱 ' + c.movil);
+    if (c.hotel) partes.push('🏨 ' + c.hotel);
+    if (c.direccion) partes.push('📍 ' + c.direccion);
+    if (c.cp) partes.push('📮 ' + c.cp);
+    const detalle = partes.join(' · ') || 'Sin más datos';
+    const nombreShow = c.nombre || '(Sin nombre)';
+    return `
+      <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid #FCD34D;border-radius:8px;margin-bottom:8px;background:#FFFBEB;">
+        <div style="flex:1;cursor:pointer;" onclick="seleccionarClienteFrecuente(${i})">
+          <div style="font-weight:800;color:#92400E;font-size:14px;">${nombreShow}</div>
+          <div style="font-size:11px;color:#A16207;margin-top:2px;">${detalle}</div>
+        </div>
+        <button type="button" onclick="eliminarClienteFrecuente(${i})" style="background:#FEE2E2;color:#DC2626;border:1.5px solid #FCA5A5;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px;flex-shrink:0;">🗑️</button>
+      </div>`;
+  }).join('');
+}
+
+function seleccionarClienteFrecuente(idx) {
   const clientes = getClientesFrecuentes();
   const c = clientes[idx];
   if (!c) return;
@@ -2109,21 +2185,40 @@ function cargarClienteFrecuente() {
   document.getElementById('direccion').value   = c.direccion || '';
   document.getElementById('cp').value          = c.cp || '';
   if (c.cp && typeof checkCP === 'function') checkCP(c.cp);
+  if (typeof sonidoAgregarProducto === 'function') sonidoAgregarProducto();
+  // Scroll a Datos del Cliente
+  const sec = document.getElementById('cliente');
+  if (sec) sec.scrollIntoView({behavior:'smooth', block:'center'});
 }
 
-function eliminarClienteFrecuente() {
-  const sel = document.getElementById('clienteFrecuente');
-  const idx = sel.value;
-  if (idx === '') { alert('⚠️ Selecciona un cliente para eliminar'); return; }
+function eliminarClienteFrecuente(idx) {
   const clientes = getClientesFrecuentes();
-  const nombre = clientes[idx] ? clientes[idx].nombre : '';
-  if (!confirm('¿Eliminar a ' + nombre + ' de clientes frecuentes?')) return;
+  const nombre = clientes[idx] ? (clientes[idx].nombre || 'este cliente') : 'este cliente';
+  if (!confirm('¿Eliminar a ' + nombre + '?')) return;
   clientes.splice(idx, 1);
-  guardarClientesFrecuentes(clientes);
-  renderClientesFrecuentes();
-  sel.value = '';
+  guardarListaClientes(clientes);
+  renderListaClientes();
 }
 
+function toggleCrearCliente() {
+  const body = document.getElementById('crearClienteBody');
+  const arrow = document.getElementById('ccArrow');
+  if (!body) return;
+  const visible = body.style.display !== 'none';
+  body.style.display = visible ? 'none' : 'block';
+  if (arrow) arrow.textContent = visible ? '▼' : '▲';
+}
+
+function toggleClientesGuardados() {
+  const body = document.getElementById('clientesGuardadosBody');
+  const arrow = document.getElementById('cgArrow');
+  if (!body) return;
+  const visible = body.style.display !== 'none';
+  body.style.display = visible ? 'none' : 'block';
+  if (arrow) arrow.textContent = visible ? '▼' : '▲';
+}
+
+// Guardar cliente actual automáticamente al generar tirilla (mantener compatibilidad)
 function guardarClienteActualComoFrecuente() {
   const nombre = document.getElementById('cliente').value.trim();
   if (!nombre) return;
@@ -2134,22 +2229,17 @@ function guardarClienteActualComoFrecuente() {
   const cp         = document.getElementById('cp').value.trim();
 
   let clientes = getClientesFrecuentes();
-  // Buscar si ya existe (por nombre + móvil)
   const existeIdx = clientes.findIndex(c => c.nombre === nombre && c.movil === movil);
-  const nuevoCliente = { nombre, movil, hotel, habitacion, direccion, cp };
-
-  if (existeIdx >= 0) {
-    clientes[existeIdx] = nuevoCliente; // Actualizar datos
-  } else {
-    clientes.push(nuevoCliente); // Nuevo cliente
-  }
-  guardarClientesFrecuentes(clientes);
-  renderClientesFrecuentes();
+  const nuevo = { nombre, movil, hotel, habitacion, direccion, cp };
+  if (existeIdx >= 0) clientes[existeIdx] = nuevo;
+  else clientes.push(nuevo);
+  guardarListaClientes(clientes);
+  renderListaClientes();
 }
 
-// Inicializar lista al cargar
-document.addEventListener('DOMContentLoaded', renderClientesFrecuentes);
-if (document.readyState !== 'loading') renderClientesFrecuentes();
+// Inicializar
+document.addEventListener('DOMContentLoaded', renderListaClientes);
+if (document.readyState !== 'loading') renderListaClientes();
 
 </script>
 </body>
