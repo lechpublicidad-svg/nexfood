@@ -825,7 +825,7 @@ footer {
         <div class="form-group"><label>Código Postal</label><input type="text" id="cfCp" placeholder="28000"></div>
         <div class="form-group full"><label>Dirección</label><input type="text" id="cfDireccion" placeholder="Calle, número, piso, puerta"></div>
       </div>
-      <button type="button" onclick="guardarNuevoClienteFrecuente()" style="width:100%;padding:13px;background:linear-gradient(135deg,#92400E,#D97706);color:#fff;border:none;border-radius:8px;font-family:'Bebas Neue';font-size:17px;letter-spacing:2px;cursor:pointer;margin-top:12px;box-shadow:0 4px 14px rgba(217,119,6,.35);">💾 GUARDAR CLIENTE</button>
+      <button type="button" id="btnGuardarCliente" onclick="guardarNuevoClienteFrecuente()" style="width:100%;padding:13px;background:linear-gradient(135deg,#92400E,#D97706);color:#fff;border:none;border-radius:8px;font-family:'Bebas Neue';font-size:17px;letter-spacing:2px;cursor:pointer;margin-top:12px;box-shadow:0 4px 14px rgba(217,119,6,.35);">💾 GUARDAR CLIENTE</button>
     </div>
   </div>
 </div>
@@ -2122,6 +2122,34 @@ async function fetchClientesFrecuentes() {
   }
 }
 
+let _editandoClienteId = null;
+
+function editarClienteFrecuente(id) {
+  const c = _clientesCache.find(x => x.id === id);
+  if (!c) return;
+  _editandoClienteId = id;
+
+  document.getElementById('cfNombre').value     = c.nombre || '';
+  document.getElementById('cfMovil').value      = c.movil || '';
+  document.getElementById('cfHotel').value      = c.hotel || '';
+  document.getElementById('cfHabitacion').value = c.habitacion || '';
+  document.getElementById('cfCp').value         = c.cp || '';
+  document.getElementById('cfDireccion').value  = c.direccion || '';
+
+  // Abrir el formulario y cambiar el botón a "Actualizar"
+  const body = document.getElementById('crearClienteBody');
+  const arrow = document.getElementById('ccArrow');
+  if (body) body.style.display = 'block';
+  if (arrow) arrow.textContent = '▲';
+
+  const btn = document.getElementById('btnGuardarCliente');
+  if (btn) btn.textContent = '✏️ ACTUALIZAR CLIENTE';
+
+  const title = document.querySelector('#crearClienteBody').previousElementSibling;
+  // Scroll al formulario
+  body.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
 async function guardarNuevoClienteFrecuente() {
   const nombre      = document.getElementById('cfNombre').value.trim();
   const movil       = document.getElementById('cfMovil').value.trim();
@@ -2137,23 +2165,48 @@ async function guardarNuevoClienteFrecuente() {
   }
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/clientes`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ nombre, movil, hotel, habitacion, cp, direccion })
-    });
+    const datos = { nombre, movil, hotel, habitacion, cp, direccion };
+    let res;
+
+    if (_editandoClienteId) {
+      // ACTUALIZAR cliente existente
+      res = await fetch(`${SUPABASE_URL}/rest/v1/clientes?id=eq.${_editandoClienteId}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(datos)
+      });
+    } else {
+      // CREAR cliente nuevo
+      res = await fetch(`${SUPABASE_URL}/rest/v1/clientes`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(datos)
+      });
+    }
     if (!res.ok) throw new Error('Error al guardar');
+
+    const eraEdicion = !!_editandoClienteId;
+    _editandoClienteId = null;
 
     // Limpiar formulario
     ['cfNombre','cfMovil','cfHotel','cfHabitacion','cfCp','cfDireccion'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = '';
     });
+
+    // Restaurar texto del botón
+    const btn = document.getElementById('btnGuardarCliente');
+    if (btn) btn.textContent = '💾 GUARDAR CLIENTE';
 
     await renderListaClientes();
     if (typeof sonidoAgregarProducto === 'function') sonidoAgregarProducto();
@@ -2163,7 +2216,7 @@ async function guardarNuevoClienteFrecuente() {
     const arrow = document.getElementById('ccArrow');
     if (body) body.style.display = 'none';
     if (arrow) arrow.textContent = '▼';
-    alert('✅ Cliente guardado correctamente');
+    alert(eraEdicion ? '✅ Cliente actualizado correctamente' : '✅ Cliente guardado correctamente');
   } catch(e) {
     alert('⚠️ Error al guardar el cliente. Verifica tu conexión a internet.');
     console.error(e);
@@ -2188,17 +2241,18 @@ async function renderListaClientes() {
   cont.innerHTML = clientes.map((c) => {
     const partes = [];
     if (c.movil) partes.push('📱 ' + c.movil);
-    if (c.hotel) partes.push('🏨 ' + c.hotel);
     if (c.direccion) partes.push('📍 ' + c.direccion);
     if (c.cp) partes.push('📮 ' + c.cp);
     const detalle = partes.join(' · ') || 'Sin más datos';
-    const nombreShow = c.nombre || '(Sin nombre)';
+    // Mostrar nombre, o si no hay, mostrar hotel, o si tampoco, "(Sin datos)"
+    const nombreShow = c.nombre || (c.hotel ? '🏨 ' + c.hotel : '(Sin nombre)');
     return `
       <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid #FCD34D;border-radius:8px;margin-bottom:8px;background:#FFFBEB;">
         <div style="flex:1;cursor:pointer;" onclick="seleccionarClienteFrecuente(${c.id})">
           <div style="font-weight:800;color:#92400E;font-size:14px;">${nombreShow}</div>
           <div style="font-size:11px;color:#A16207;margin-top:2px;">${detalle}</div>
         </div>
+        <button type="button" onclick="editarClienteFrecuente(${c.id})" style="background:#DBEAFE;color:#1D4ED8;border:1.5px solid #93C5FD;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px;flex-shrink:0;">✏️</button>
         <button type="button" onclick="eliminarClienteFrecuente(${c.id})" style="background:#FEE2E2;color:#DC2626;border:1.5px solid #FCA5A5;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px;flex-shrink:0;">🗑️</button>
       </div>`;
   }).join('');
@@ -2246,6 +2300,12 @@ function toggleCrearCliente() {
   const visible = body.style.display !== 'none';
   body.style.display = visible ? 'none' : 'block';
   if (arrow) arrow.textContent = visible ? '▼' : '▲';
+  // Si se abre manualmente (no por editar), resetear a modo "crear"
+  if (!visible) {
+    _editandoClienteId = null;
+    const btn = document.getElementById('btnGuardarCliente');
+    if (btn) btn.textContent = '💾 GUARDAR CLIENTE';
+  }
 }
 
 function toggleClientesGuardados() {
