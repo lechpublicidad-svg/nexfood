@@ -313,22 +313,85 @@ header span {
 
 
 
+
+
+/* ═══ CATEGORÍAS — lista plana desplegable ═══ */
+.cat-tabs.cat-acordeon { display:block; padding:6px 14px 14px; background:#fff; border-bottom:none; }
+.cat-group-title { display:flex; align-items:center; gap:8px; margin:16px 2px 8px; font-size:10.5px; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:var(--muted); }
+.cat-group-title::before { content:''; width:4px; height:13px; border-radius:2px; background:var(--gc,#94A3B8); }
+.cat-group-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
+.cat-item { --gc:#64748B; margin-bottom:7px; }
+.cat-item.todo { margin-top:8px; }
+.cat-row {
+  width:100%; display:flex; align-items:center; gap:10px; padding:12px 14px; text-align:left; cursor:pointer;
+  background:#fff; color:var(--text); border:1px solid var(--border); border-left:5px solid var(--gc); border-radius:12px;
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:800; letter-spacing:.8px; text-transform:uppercase;
+  scroll-margin-top:92px; -webkit-tap-highlight-color:transparent; transition:background .15s, border-color .15s;
+}
+.cat-row:active { background:var(--surf2); }
+.cat-row-name { flex:1; }
+.cat-row-count { min-width:26px; padding:2px 9px; border-radius:20px; background:var(--surf2); color:var(--muted); font-size:11px; font-weight:800; text-align:center; letter-spacing:0; }
+.cat-row-chev { font-size:14px; color:var(--gc); transition:transform .2s; }
+.cat-item.abierta .cat-row { background:#FAFAFA; background:color-mix(in srgb, var(--gc) 9%, #fff); border-color:var(--gc); border-bottom-left-radius:0; border-bottom-right-radius:0; }
+.cat-item.abierta .cat-row-chev { transform:rotate(180deg); }
+.cat-item.abierta .cat-row-count { background:var(--gc); color:#fff; }
+.cat-panel { padding:10px; background:#fff; border:1px solid var(--gc); border-left:5px solid var(--gc); border-top:none; border-radius:0 0 12px 12px; }
+.cat-panel[hidden] { display:none; }
+.cat-panel .products-grid { max-height:none; overflow:visible; padding:0; }
+.cat-item.todo .cat-panel .products-grid { max-height:65vh; overflow-y:auto; }
+.search-results { padding:10px 14px 12px; background:var(--surf2); border-bottom:1px solid var(--border); }
+.search-results .products-grid { max-height:60vh; padding:0; }
+.products-grid:empty::before { content:'Sin resultados'; grid-column:1/-1; text-align:center; padding:12px; font-size:12px; color:var(--muted); }
+
+/* ═══ ÚLTIMAS 3 TIRILLAS ═══ */
+.ut-box { margin-top:16px; padding-top:14px; border-top:2px dashed var(--border); }
+.ut-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:9px; font-size:12px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; color:var(--red); }
+.ut-banner { display:none; margin-bottom:10px; padding:9px 10px; border-radius:10px; background:#FFFBEB; border:2px solid #F59E0B; color:#92400E; font-size:12px; font-weight:700; }
+.ut-cancel { margin-top:7px; width:100%; padding:7px; border-radius:8px; border:1.5px solid #FCA5A5; background:#FEE2E2; color:#B91C1C; font-weight:800; font-size:12px; cursor:pointer; }
+.ut-item { display:flex; align-items:center; gap:9px; padding:9px 10px; margin-bottom:8px; background:#fff; border:1.5px solid var(--border); border-radius:10px; cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+.ut-item:hover { border-color:var(--blue); }
+.ut-item.editando { border-color:#F59E0B; background:#FFFBEB; box-shadow:0 0 0 3px rgba(245,158,11,.22); }
+.ut-num { font-weight:800; font-size:13px; color:var(--red); flex-shrink:0; }
+.ut-main { flex:1; min-width:0; }
+.ut-name { font-weight:700; font-size:13px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ut-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+.ut-btn { flex-shrink:0; padding:6px 10px; border-radius:8px; border:1.5px solid #93C5FD; background:#DBEAFE; color:#1D4ED8; font-size:12px; font-weight:800; cursor:pointer; }
+.ut-vacio { text-align:center; padding:12px; font-size:12px; color:var(--muted); background:var(--surf2); border-radius:10px; }
+.ut-toast { position:fixed; left:50%; top:78px; transform:translateX(-50%); z-index:9500; max-width:92vw; padding:10px 16px; border-radius:12px; background:#92400E; color:#fff; font-size:13px; font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,.3); }
 </style>
 </head>
 <body>
 
 
 
-<!-- SPLASH VERANO -->
+<!-- SPLASH OTOÑO -->
 <div id="splashScreen">
   <div id="splashBg">
-    <div class="sun"></div>
-    <div class="ray r1"></div><div class="ray r2"></div><div class="ray r3"></div>
-    <div class="ray r4"></div><div class="ray r5"></div><div class="ray r6"></div>
-    <div class="wave w1"></div><div class="wave w2"></div>
+    <div class="otono-sol"></div>
+    <div class="otono-niebla"></div>
+    <div class="otono-hojas">
+      <span class="leaf" style="left:43%;font-size:21px;--dur:5.1s;--delay:0.9s;--sway:-34px;--rot:-367deg">🍂</span>
+      <span class="leaf" style="left:66%;font-size:33px;--dur:3.6s;--delay:0.2s;--sway:-34px;--rot:226deg">🍁</span>
+      <span class="leaf" style="left:9%;font-size:27px;--dur:4.9s;--delay:0.3s;--sway:-70px;--rot:475deg">🍂</span>
+      <span class="leaf" style="left:8%;font-size:24px;--dur:5.2s;--delay:0.1s;--sway:48px;--rot:-253deg">🍁</span>
+      <span class="leaf" style="left:75%;font-size:25px;--dur:3.8s;--delay:2.0s;--sway:-36px;--rot:-370deg">🍃</span>
+      <span class="leaf" style="left:72%;font-size:26px;--dur:4.6s;--delay:1.4s;--sway:61px;--rot:340deg">🍂</span>
+      <span class="leaf" style="left:76%;font-size:27px;--dur:5.0s;--delay:0.9s;--sway:-80px;--rot:-537deg">🍂</span>
+      <span class="leaf" style="left:12%;font-size:30px;--dur:4.3s;--delay:1.3s;--sway:76px;--rot:-327deg">🍁</span>
+      <span class="leaf" style="left:17%;font-size:30px;--dur:4.2s;--delay:0.4s;--sway:39px;--rot:-395deg">🍂</span>
+      <span class="leaf" style="left:87%;font-size:30px;--dur:3.4s;--delay:1.3s;--sway:51px;--rot:484deg">🍁</span>
+      <span class="leaf" style="left:76%;font-size:22px;--dur:4.8s;--delay:0.2s;--sway:90px;--rot:-422deg">🍃</span>
+      <span class="leaf" style="left:9%;font-size:38px;--dur:4.7s;--delay:0.7s;--sway:73px;--rot:325deg">🍂</span>
+      <span class="leaf" style="left:87%;font-size:31px;--dur:3.9s;--delay:2.3s;--sway:-40px;--rot:-432deg">🍂</span>
+      <span class="leaf" style="left:29%;font-size:27px;--dur:4.7s;--delay:0.3s;--sway:55px;--rot:-434deg">🍁</span>
+      <span class="leaf" style="left:23%;font-size:24px;--dur:4.1s;--delay:1.3s;--sway:82px;--rot:461deg">🍂</span>
+      <span class="leaf" style="left:92%;font-size:32px;--dur:4.0s;--delay:0.9s;--sway:-44px;--rot:-222deg">🍁</span>
+      <span class="leaf" style="left:21%;font-size:35px;--dur:3.7s;--delay:0.6s;--sway:-83px;--rot:314deg">🍃</span>
+      <span class="leaf" style="left:2%;font-size:38px;--dur:3.5s;--delay:1.3s;--sway:-50px;--rot:-533deg">🍂</span>
+    </div>
     <div class="splash-logo-wrap">
       <div class="splash-logo">NEXFOOD</div>
-      <div class="splash-sub">🌞 Delivery en Madrid · Abierto 24h</div>
+      <div class="splash-sub">🍂 Delivery en Madrid · Abierto 24h</div>
       <div class="splash-progress"><div class="splash-progress-bar"></div></div>
     </div>
   </div>
@@ -342,97 +405,80 @@ header span {
 @keyframes splashOut { to { opacity:0; pointer-events:none; visibility:hidden; } }
 
 #splashBg {
-  width:100%;height:100%;
-  background:linear-gradient(180deg, #FF6B35 0%, #FF8C42 20%, #FFA552 40%, #FFD166 65%, #06D6A0 80%, #118AB2 100%);
+  width:100%;height:100%;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#3B1A0B 0%,#7A3010 28%,#C4601C 58%,#EE9A3A 82%,#F7C86B 100%);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
 }
 
-/* Sol */
-.sun {
-  position:absolute;top:-60px;left:50%;transform:translateX(-50%);
-  width:180px;height:180px;
-  background:radial-gradient(circle, #FFE566 0%, #FFD000 50%, #FF9500 100%);
-  border-radius:50%;
-  box-shadow:0 0 60px rgba(255,200,0,.7), 0 0 120px rgba(255,150,0,.4);
-  animation:sunRise 1.2s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-@keyframes sunRise {
-  from { top:-180px; opacity:0; }
-  to   { top:-60px;  opacity:1; }
-}
-
-/* Rayos del sol */
-.ray {
-  position:absolute;top:20px;left:50%;
-  width:4px;height:80px;
-  background:linear-gradient(to bottom, rgba(255,220,0,.8), transparent);
-  border-radius:2px;
-  transform-origin:top center;
-  animation:rayGrow .8s ease .8s forwards;
+/* Sol bajo de atardecer que sube suave */
+.otono-sol {
+  position:absolute;left:50%;bottom:-120px;transform:translateX(-50%);
+  width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,#FFE9A8 0%,#FFC247 38%,rgba(255,150,40,.55) 62%,rgba(255,120,20,0) 72%);
+  filter:blur(1px);
+  animation:otonoSol 1.6s cubic-bezier(.22,1,.36,1) forwards;
   opacity:0;
 }
-.r1{transform:translateX(-50%) rotate(0deg);}
-.r2{transform:translateX(-50%) rotate(45deg);}
-.r3{transform:translateX(-50%) rotate(90deg);}
-.r4{transform:translateX(-50%) rotate(135deg);}
-.r5{transform:translateX(-50%) rotate(180deg);}
-.r6{transform:translateX(-50%) rotate(225deg);}
-@keyframes rayGrow { from{opacity:0;height:40px} to{opacity:1;height:80px} }
+@keyframes otonoSol { from{bottom:-260px;opacity:0} to{bottom:-120px;opacity:1} }
 
-/* Olas */
-.wave {
-  position:absolute;bottom:0;left:0;width:200%;height:100px;
-  background:rgba(255,255,255,0.15);
-  border-radius:50% 50% 0 0;
-  animation:waveMove 3s linear infinite;
+/* Neblina cálida */
+.otono-niebla {
+  position:absolute;left:-20%;right:-20%;bottom:0;height:38%;
+  background:linear-gradient(0deg,rgba(255,226,170,.38),rgba(255,226,170,0));
+  animation:otonoNiebla 5s ease-in-out infinite alternate;
 }
-.w1 { bottom:0; animation-delay:0s; }
-.w2 { bottom:20px; opacity:.6; animation-delay:-1.5s; }
-@keyframes waveMove {
-  0%  { transform:translateX(0); }
-  100%{ transform:translateX(-50%); }
+@keyframes otonoNiebla { from{transform:translateX(-3%)} to{transform:translateX(3%)} }
+
+/* Hojas cayendo */
+.otono-hojas { position:absolute;inset:0;pointer-events:none; }
+.leaf {
+  position:absolute;top:-60px;opacity:0;
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.28));
+  animation:hojaCae var(--dur) linear var(--delay) infinite;
+}
+@keyframes hojaCae {
+  0%   { transform:translate(0,0) rotate(0deg); opacity:0; }
+  10%  { opacity:1; }
+  50%  { transform:translate(var(--sway),55vh) rotate(calc(var(--rot) / 2)); }
+  90%  { opacity:1; }
+  100% { transform:translate(calc(var(--sway) * -.6),112vh) rotate(var(--rot)); opacity:0; }
 }
 
 /* Logo */
 .splash-logo-wrap {
   text-align:center;z-index:2;position:relative;
-  opacity:0;transform:translateY(24px);
-  animation:logoIn .6s ease 1s forwards;
+  opacity:0;transform:translateY(24px) scale(.96);
+  animation:logoIn .7s cubic-bezier(.22,1,.36,1) .8s forwards;
 }
-@keyframes logoIn { to{opacity:1;transform:translateY(0);} }
-
+@keyframes logoIn { to{opacity:1;transform:translateY(0) scale(1);} }
 .splash-logo {
-  font-family:'Bebas Neue',sans-serif;
-  font-size:72px;letter-spacing:14px;
-  color:#fff;
-  text-shadow:0 2px 20px rgba(0,0,0,.25), 0 0 40px rgba(255,100,0,.3);
-  line-height:1;
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,15vw,72px);letter-spacing:clamp(4px,2.6vw,14px);color:#FFF4DC;line-height:1;white-space:nowrap;
+  text-shadow:0 3px 0 #8A3A0E,0 0 28px rgba(255,170,60,.65),0 6px 22px rgba(0,0,0,.35);
 }
 .splash-sub {
-  font-size:12px;letter-spacing:3px;color:rgba(255,255,255,.85);
-  text-transform:uppercase;font-family:'Plus Jakarta Sans',sans-serif;
-  font-weight:700;margin-top:8px;
+  font-size:12px;letter-spacing:3px;color:rgba(255,244,220,.92);text-transform:uppercase;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;margin-top:8px;
+  text-shadow:0 2px 8px rgba(0,0,0,.35);
 }
 .splash-progress {
-  width:200px;height:3px;background:rgba(255,255,255,.25);
-  border-radius:2px;margin:18px auto 0;overflow:hidden;
+  width:200px;height:3px;background:rgba(255,244,220,.28);border-radius:2px;margin:18px auto 0;overflow:hidden;
 }
 .splash-progress-bar {
-  height:100%;background:linear-gradient(90deg,#fff,rgba(255,255,255,.6));
-  border-radius:2px;width:0;
-  animation:progressFill 2s ease 1.2s forwards;
+  height:100%;width:0;border-radius:2px;
+  background:linear-gradient(90deg,#FFE9A8,#FFB347);box-shadow:0 0 8px rgba(255,190,80,.9);
+  animation:progressFill 2s ease 1.1s forwards;
 }
 @keyframes progressFill { to{width:100%;} }
 
-/* Fondo general veraniego */
+/* Fondo general de la app (sin cambios respecto a la versión anterior) */
 body {
-  background:linear-gradient(180deg, #FFF8F0 0%, #FFF3E0 100%) !important;
+  background:linear-gradient(180deg,#FFF8F0 0%,#FFF3E0 100%) !important;
   background-attachment:fixed !important;
 }
 body::before { content:none !important; }
 body::after  { content:none !important; }
 </style>
+
 
 <header id="mainHeader">
   <canvas id="headerCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
@@ -495,10 +541,11 @@ body::after  { content:none !important; }
     <!-- CARTA -->
     <div class="section sec-naranja">
       <div class="section-title" style="background:linear-gradient(135deg,#C2410C,#F97316);">🍽️ Carta de Productos</div>
-      <div class="cat-tabs" id="catTabs"></div>
       <div class="search-box"><label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#C2410C;font-weight:700;display:block;margin-bottom:6px;">🔍 Buscar Producto</label>
 <input type="text" id="searchInput" placeholder="Escribe el nombre del producto..."></div>
-      <div class="products-grid" id="productsGrid"></div>
+      <div class="search-results" id="searchResultsHost" style="display:none;"></div>
+      <div class="cat-tabs" id="catTabs"></div>
+      <div id="gridHolder" style="display:none;"><div class="products-grid" id="productsGrid"></div></div>
     </div>
 
     <!-- OTRO PRODUCTO EMPLEADO -->
@@ -560,6 +607,15 @@ body::after  { content:none !important; }
       <div style="padding:0 14px 14px;">
         <button class="btn-generar" onclick="generarTirilla()">🖨️ GENERAR TIRILLA</button>
         <button class="btn-reset" onclick="resetPedido()">Limpiar todo</button>
+
+        <div class="ut-box" id="ultimasTirillasBox">
+          <div class="ut-title"><span>🧾 Últimas tirillas</span><span><span id="utCount">0</span>/3</span></div>
+          <div class="ut-banner" id="utBanner">
+            <div id="utBannerTxt">✏️ Corrigiendo tirilla</div>
+            <button type="button" class="ut-cancel" onclick="resetPedido()">✖ Cancelar corrección</button>
+          </div>
+          <div id="ultimasTirillasLista"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -818,38 +874,37 @@ const catalogo = [
   {cat:"POSTRES",nombre:"ROSQUILLAS DE QUESO",precio:1.10},
   {cat:"POSTRES",nombre:"SALCHIPAPA",precio:9.99},
   // ESPECIALES
-  {cat:"ESPECIAL",nombre:"BURRITO TERNERA Y POLLO PICANTE",precio:16.50},  {cat:"EMPLEADOS",nombre:"PIZZA EMPLEADOS",precio:10.00},
+  {cat:"ESPECIAL",nombre:"BURRITO TERNERA Y POLLO PICANTE",precio:16.50},  {cat:"EMPLEADOS",nombre:"PIZZA EMPLEADOS",precio:7.99},
 
   // PIZZAS
-  {cat:"PIZZA",nombre:"PIZZA MARGHERITA",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA BBQ POLLO",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA PROSCIUTTO",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA SPECIALE",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA QUATTRO FORMAGGI",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA SALAME",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA VERDURE GRIGLIATE",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA MEXICANA",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA TONNO",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA CARBONARA",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA VEGANA",precio:13.99},
-  {cat:"PIZZA",nombre:"PIZZA CALABRESE PICCANTE",precio:13.99},
+  {cat:"PIZZA",nombre:"PIZZA MARGHERITA",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA BBQ POLLO",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA PROSCIUTTO",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA SPECIALE",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA QUATTRO FORMAGGI",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA SALAME",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA VERDURE GRIGLIATE",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA MEXICANA",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA TONNO",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA CARBONARA",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA VEGANA",precio:10.99},
+  {cat:"PIZZA",nombre:"PIZZA CALABRESE PICCANTE",precio:10.99},
 
   // EMPLEADOS
-  {cat:"EMPLEADOS",nombre:"GASEOSA 2L EMPLEADOS",precio:2.50},
-  {cat:"EMPLEADOS",nombre:"REDBULL / MONSTER EMPLEADOS",precio:1.25},
+  {cat:"EMPLEADOS",nombre:"GASEOSA 2 LITROS EMPLEADOS",precio:2.50},
+  {cat:"EMPLEADOS",nombre:"RED BULL / MONSTER EMPLEADOS",precio:1.25},
   {cat:"EMPLEADOS",nombre:"COMBO BURGER EMPLEADOS",precio:10.00},
   {cat:"EMPLEADOS",nombre:"GASEOSA LATA EMPLEADOS",precio:1.20},
-  {cat:"EMPLEADOS",nombre:"HAMBURGUESA DEVOLUCIÓN",precio:5.00},
-  {cat:"EMPLEADOS",nombre:"PICADA EMPLEADOS (TERNERA PECHUGA CHICHARRÓN CHORIZO Y AREPA)",precio:30.00},
-  {cat:"EMPLEADOS",nombre:"COMBO ALITAS EMPLEADO",precio:10.00},
-  {cat:"EMPLEADOS",nombre:"COMBO AROS DE CALAMAR EMPLEADO",precio:10.00},
-  {cat:"EMPLEADOS",nombre:"PATATAS CRIOLLAS Y CHICHARRÓN",precio:12.00},
-  {cat:"EMPLEADOS",nombre:"BOTELLA DE AGUA 500ML EMPLEADOS",precio:1.00},
+  {cat:"EMPLEADOS",nombre:"PICADA EMPLEADOS (TERNERA, PECHUGA, CHICHARRÓN, CHORIZO Y AREPA)",precio:30.00},
+  {cat:"EMPLEADOS",nombre:"COMBO ALITAS EMPLEADOS",precio:10.00},
+  {cat:"EMPLEADOS",nombre:"COMBO AROS DE CALAMAR EMPLEADOS",precio:10.00},
+  {cat:"EMPLEADOS",nombre:"COMBO CHICHARRÓN EMPLEADOS",precio:7.99},
+  {cat:"EMPLEADOS",nombre:"BOTELLA DE AGUA 500 ML EMPLEADOS",precio:1.00},
 
 ];
 
 let pedido = [];
-let catActiva = 'TODO';
+let catActiva = '';
 let pendientesAmbiguos = []; // productos del cliente sin resolver
 
 // ── NORMALIZAR (quitar tildes, minúsculas) ──
@@ -904,40 +959,7 @@ function checkCP(val) {
 }
 
 // ── INIT ──
-// ══════════════════════════════════════════
-// SPLASH SCREEN + ANIMACIONES FUTURISTAS
-// ══════════════════════════════════════════
-(function() {
-  
 
-  // Secuencia de bienvenida
-  const content = document.getElementById('splashContent');
-  const bar     = document.getElementById('splashBar');
-
-  // Paso 1: aparecer contenido (0.3s)
-  setTimeout(() => {
-    content.style.transition = 'opacity .6s, transform .6s';
-    content.style.opacity    = '1';
-    content.style.transform  = 'scale(1)';
-  }, 300);
-
-  // Paso 2: barra de progreso (0.8s)
-  setTimeout(() => {
-    bar.style.width = '100%';
-  }, 800);
-
-  // Paso 3: fade out splash (3.2s)
-  setTimeout(() => {
-    cancelAnimationFrame(raf);
-    splash.style.transition = 'opacity .6s, transform .6s';
-    splash.style.opacity    = '0';
-    splash.style.transform  = 'scale(1.04)';
-    setTimeout(() => {
-      splash.style.display = 'none';
-    }, 600);
-  }, 3200);
-
-})();
 
 // ══════════════════════════════════════════
 // HEADER CANVAS — líneas láser sutiles
@@ -1030,38 +1052,57 @@ function sonidoGenerarTirilla() {
 
 
 function init() {
-  const catsRaw = ['TODO', ...new Set(catalogo.map(p => p.cat))];
-  // EMPLEADOS siempre al final
-  const cats = catsRaw.filter(c => c !== 'EMPLEADOS').concat(catsRaw.includes('EMPLEADOS') ? ['EMPLEADOS'] : []);
+  catActiva = '';
+  const catsRaw = [...new Set(catalogo.map(p => p.cat))];
   const tabsEl = document.getElementById('catTabs');
-  cats.forEach(cat => {
+  tabsEl.innerHTML = '';
+  tabsEl.classList.add('cat-acordeon');
+  _catFilas = {};
+
+  // Grupos ordenados. Empleados siempre al final.
+  const GRUPOS = [
+    { titulo:'🍔 Comidas',                  color:'#E02424', cats:['BURGER','BURRITO','CARNES','POLLO','PESCADOS','TACOS','QUESADILLA','NACHOS','PERRITO','SANDWICH','PIZZA'] },
+    { titulo:'🍟 Entrantes y acompañantes', color:'#F97316', cats:['ENTRANTES','ENSALADAS','GUARNICION','EXTRAS'] },
+    { titulo:'🥤 Bebidas',                  color:'#0284C7', cats:['REFRESCOS'] },
+    { titulo:'🍺 Alcohol',                  color:'#7C3AED', cats:['CERVEZA','VINOS','CAVA','LICORES'] },
+    { titulo:'🛒 Otros',                    color:'#64748B', cats:['POSTRES','CIGARRILLOS','PACKS','ESPECIAL'] },
+    { titulo:'👷 Empleados',                color:'#16A34A', cats:['EMPLEADOS'] }
+  ];
+  // Categorías nuevas que no estén en ningún grupo van a "Otros" (nunca desaparecen)
+  const conocidas = new Set();
+  GRUPOS.forEach(g => g.cats.forEach(c => conocidas.add(c)));
+  GRUPOS[4].cats.push(...catsRaw.filter(c => !conocidas.has(c)));
+
+  function crearFila(cat, color, esTodo) {
+    const n = esTodo ? catalogo.length : catalogo.filter(p => p.cat === cat).length;
+    const wrap = document.createElement('div');
+    wrap.className = 'cat-item' + (esTodo ? ' todo' : '');
+    wrap.style.setProperty('--gc', color);
     const btn = document.createElement('button');
-    btn.className = 'cat-tab' + (cat==='TODO' ? ' active' : '');
-    btn.textContent = cat;
-    if (cat === 'EMPLEADOS') {
-      btn.style.borderColor = '#059669';
-      btn.style.color = '#065f46';
-      btn.style.background = '#ECFDF5';
-      btn.style.fontWeight = '800';
-    }
-    btn.onclick = () => {
-      catActiva = cat;
-      document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      // Limpiar buscador al cambiar categoría
-      const searchInput = document.getElementById('searchInput');
-      if (searchInput) searchInput.value = '';
-      // Mostrar sección empleado solo cuando está en EMPLEADOS
-      const secEmp = document.getElementById('secEmpleado');
-      if (secEmp) secEmp.style.display = cat === 'EMPLEADOS' ? 'block' : 'none';
-      // Ocultar sección agregar manual cuando EMPLEADOS está activo
-      const secManual = document.getElementById('secManual');
-      if (secManual) secManual.style.display = cat === 'EMPLEADOS' ? 'none' : 'block';
-      renderProducts();
-    };
-    tabsEl.appendChild(btn);
+    btn.type = 'button'; btn.className = 'cat-row'; btn.setAttribute('aria-expanded','false');
+    const nm = document.createElement('span'); nm.className = 'cat-row-name'; nm.textContent = esTodo ? 'TODO · ver todos los productos' : cat;
+    const ct = document.createElement('span'); ct.className = 'cat-row-count'; ct.textContent = n;
+    const ch = document.createElement('span'); ch.className = 'cat-row-chev'; ch.textContent = '▾';
+    btn.appendChild(nm); btn.appendChild(ct); btn.appendChild(ch);
+    const panel = document.createElement('div'); panel.className = 'cat-panel'; panel.hidden = true;
+    btn.onclick = () => nfToggleCategoria(cat);
+    wrap.appendChild(btn); wrap.appendChild(panel);
+    _catFilas[cat] = { wrap, btn, panel };
+    return wrap;
+  }
+
+  tabsEl.appendChild(crearFila('TODO', '#34478A', true));
+  GRUPOS.forEach(g => {
+    const presentes = g.cats.filter(c => catsRaw.includes(c));
+    if (!presentes.length) return;
+    const t = document.createElement('div');
+    t.className = 'cat-group-title'; t.style.setProperty('--gc', g.color); t.textContent = g.titulo;
+    tabsEl.appendChild(t);
+    presentes.forEach(c => tabsEl.appendChild(crearFila(c, g.color, false)));
   });
-  document.getElementById('searchInput').addEventListener('input', renderProducts);
+  nfPosicionarGrid();
+
+  document.getElementById('searchInput').addEventListener('input', nfAlBuscar);
   document.getElementById('domToggle').addEventListener('change', updateTotals);
   document.getElementById('ticketNum').addEventListener('input', () => {
     document.getElementById('headerTicket').textContent = 'TICKET #' + document.getElementById('ticketNum').value;
@@ -1397,8 +1438,9 @@ function resetPedido() {
   document.getElementById('cpAlerta').style.display='none';
   // Limpiar localStorage
   ['nf_pedido','nf_cliente','nf_movil','nf_hotel','nf_habitacion',
-   'nf_pago','nf_direccion','nf_cp','nf_notaExtra','nf_ticketNum'].forEach(k=>localStorage.removeItem(k));
+   'nf_pago','nf_direccion','nf_cp','nf_notaExtra'].forEach(k=>localStorage.removeItem(k));
   renderOrder(); renderProducts();
+  nfCancelarEdicion();
 }
 
 function generarTirilla() {
@@ -1414,8 +1456,12 @@ function generarTirilla() {
   const notaExtra = document.getElementById('notaExtra') ? document.getElementById('notaExtra').value.trim() : '';
 
   if (pendientesAmbiguos.length > 0) {
-    alert('⚠️ No puedes generar la tirilla.\n\nEl cliente pidió productos que no has seleccionado aún:\n' + pendientesAmbiguos.map(p => '   • ' + p).join('\n') + '\n\nSelecciónalos manualmente en la carta antes de continuar.');
-    return;
+    const continuar = confirm(
+      '⚠️ RECORDATORIO\n\nEl cliente también pidió estos productos que quedaron pendientes:\n' +
+      pendientesAmbiguos.map(p => '   • ' + p).join('\n') +
+      '\n\n¿Deseas continuar y generar la tirilla de todas formas?'
+    );
+    if (!continuar) return;
   }
 
   const { jsPDF } = window.jspdf;
@@ -1624,8 +1670,18 @@ function generarTirilla() {
   tc('¡Gracias por su preferencia!', y+8, 8); y += 13;
   tc('nexfood2026@gmail.com', y+8, 8);
 
-  // Avanzar ticket
-  const next = parseInt(ticket) + 1;
+  // Registrar en "Últimas tirillas" y avanzar ticket (si se está corrigiendo, no gasta número)
+  nfGuardarTirilla({
+    ticket, cliente, movil, hotel, habitacion, pago, direccion, cp,
+    ciudad: (document.getElementById('ciudad') || {}).value || 'Madrid',
+    nota: notaExtra, conDom, total, fecha, hora,
+    pedido: JSON.parse(JSON.stringify(pedido))
+  });
+  let next = parseInt(ticket) + 1;
+  if (_editTicket !== null) {
+    if (_ticketSiguiente !== null && !isNaN(_ticketSiguiente)) next = _ticketSiguiente;
+    nfSalirEdicion();
+  }
   document.getElementById('ticketNum').value = next;
   document.getElementById('headerTicket').textContent = 'TICKET #' + next;
   localStorage.setItem('nf_ticketNum', next);
@@ -1649,35 +1705,200 @@ function generarTirilla() {
   }, 1200);
 }
 
-init();
-</script>
 
-<script>
+// ══════════════════════════════════════════════════════
+// ÚLTIMAS 3 TIRILLAS — registro para corregir al instante
+// ══════════════════════════════════════════════════════
+let _editTicket = null;       // número de la tirilla que se está corrigiendo
+let _ticketSiguiente = null;  // número que tocaba antes de corregir
 
-// ── CONFETI DE GOL — solo visual ──────────────────────
-function lanzarConfeti() {
-  const colores = ['#FFD700','#FF2222','#FFFFFF','#16a34a','#FF6600','#00BFFF'];
-  for (let i = 0; i < 60; i++) {
-    setTimeout(() => {
-      const el = document.createElement('div');
-      el.className = 'gol-confeti';
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.background = colores[Math.floor(Math.random() * colores.length)];
-      el.style.animationDelay = (Math.random() * 0.5) + 's';
-      el.style.animationDuration = (1.2 + Math.random() * 1) + 's';
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 2500);
-    }, i * 30);
+function nfEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function nfLeerUltimas() {
+  try { const a = JSON.parse(localStorage.getItem('nf_ultimasTirillas') || '[]'); return Array.isArray(a) ? a : []; }
+  catch(e) { return []; }
+}
+
+function nfGuardarTirilla(s) {
+  let lista = nfLeerUltimas();
+  if (_editTicket !== null) {
+    // Corrección: reemplaza la tirilla anterior con el mismo número
+    lista = lista.filter(x => String(x.ticket) !== String(_editTicket));
+  }
+  lista.unshift(s);
+  lista = lista.slice(0, 3);   // solo las 3 últimas; la cuarta desaparece sola
+  try { localStorage.setItem('nf_ultimasTirillas', JSON.stringify(lista)); } catch(e) {}
+  nfRenderUltimas();
+}
+
+function nfGuardarEstadoEdicion() {
+  try {
+    if (_editTicket === null) localStorage.removeItem('nf_edit');
+    else localStorage.setItem('nf_edit', JSON.stringify({ t: _editTicket, n: _ticketSiguiente }));
+  } catch(e) {}
+}
+
+function nfSalirEdicion() {
+  _editTicket = null; _ticketSiguiente = null;
+  nfGuardarEstadoEdicion();
+  nfRenderUltimas();
+}
+
+function nfCancelarEdicion() {
+  if (_editTicket === null) return;
+  const sig = _ticketSiguiente;
+  nfSalirEdicion();
+  if (sig !== null && !isNaN(sig)) {
+    document.getElementById('ticketNum').value = sig;
+    document.getElementById('headerTicket').textContent = 'TICKET #' + sig;
+    try { localStorage.setItem('nf_ticketNum', sig); } catch(e) {}
   }
 }
-// Enganchar al botón generar — sin tocar la función
-const _btnGenerar = document.querySelector('.btn-generar');
-if (_btnGenerar) {
-  _btnGenerar.addEventListener('click', () => {
-    setTimeout(lanzarConfeti, 800);
+
+function nfRenderUltimas() {
+  const cont = document.getElementById('ultimasTirillasLista');
+  if (!cont) return;
+  const lista = nfLeerUltimas();
+  const cnt = document.getElementById('utCount'); if (cnt) cnt.textContent = lista.length;
+  const banner = document.getElementById('utBanner');
+  if (banner) {
+    banner.style.display = _editTicket !== null ? 'block' : 'none';
+    const t = document.getElementById('utBannerTxt');
+    if (t) t.textContent = '✏️ Corrigiendo tirilla #' + _editTicket + ' — al generar reemplaza la anterior y no gasta número nuevo';
+  }
+  if (!lista.length) {
+    cont.innerHTML = '<div class="ut-vacio">Aún no hay tirillas. Aquí quedarán las últimas 3.</div>';
+    return;
+  }
+  cont.innerHTML = lista.map((s, i) => {
+    const nombre = s.cliente || s.hotel || s.direccion || '(Sin nombre)';
+    const nItems = (s.pedido || []).reduce((a, x) => a + (x.qty || 0), 0);
+    const editando = _editTicket !== null && String(s.ticket) === String(_editTicket);
+    return `<div class="ut-item${editando ? ' editando' : ''}" onclick="nfCargarTirilla(${i})">
+      <div class="ut-num">#${nfEsc(s.ticket)}</div>
+      <div class="ut-main">
+        <div class="ut-name">${nfEsc(nombre)}</div>
+        <div class="ut-sub">${nfEsc(s.hora || '')} · ${nItems} prod. · €${Number(s.total || 0).toFixed(2)}</div>
+      </div>
+      <button type="button" class="ut-btn">✏️ Corregir</button>
+    </div>`;
+  }).join('');
+}
+
+function nfToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'ut-toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3800);
+}
+
+function nfCargarTirilla(i) {
+  const s = nfLeerUltimas()[i];
+  if (!s) return;
+  const camposForm = ['cliente','movil','hotel','habitacion','direccion','cp'];
+  const hayDatos = pedido.length > 0 || camposForm.some(id => { const el = document.getElementById(id); return el && el.value.trim(); });
+  if (hayDatos && _editTicket === null && !confirm('Hay un pedido en curso. ¿Reemplazarlo por la tirilla #' + s.ticket + '?')) return;
+  if (hayDatos && _editTicket !== null && String(_editTicket) !== String(s.ticket) && !confirm('Estás corrigiendo la tirilla #' + _editTicket + '. ¿Cambiar a la #' + s.ticket + '?')) return;
+
+  if (_editTicket === null) _ticketSiguiente = parseInt(document.getElementById('ticketNum').value);
+  _editTicket = s.ticket;
+  nfGuardarEstadoEdicion();
+
+  const set = (id, v) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = (v == null ? '' : v);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+  set('cliente', s.cliente); set('movil', s.movil); set('hotel', s.hotel);
+  set('habitacion', s.habitacion); set('direccion', s.direccion); set('cp', s.cp);
+  set('ciudad', s.ciudad || 'Madrid'); set('notaExtra', s.nota); set('pago', s.pago);
+  set('ticketNum', s.ticket);
+  document.getElementById('domToggle').checked = !!s.conDom;
+  pedido = JSON.parse(JSON.stringify(s.pedido || []));
+  pendientesAmbiguos = [];
+  if (typeof checkCP === 'function' && s.cp) checkCP(s.cp);
+  renderOrder(); renderProducts(); updateTotals();
+  nfRenderUltimas();
+  nfToast('✏️ Corrigiendo tirilla #' + s.ticket + ' — revisa los datos y vuelve a generar');
+  const c = document.getElementById('cliente');
+  if (c && c.scrollIntoView) c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function nfRestaurarEdicion() {
+  try {
+    const e = JSON.parse(localStorage.getItem('nf_edit') || 'null');
+    if (e && e.t !== undefined && e.t !== null) { _editTicket = e.t; _ticketSiguiente = e.n; }
+  } catch(err) {}
+  nfRenderUltimas();
+}
+
+
+
+// ══════════════════════════════════════════════════════
+// CATEGORÍAS — lista plana que se despliega en el lugar
+// ══════════════════════════════════════════════════════
+let _catFilas = {};
+
+function nfCerrarCategorias() {
+  Object.values(_catFilas).forEach(f => {
+    f.wrap.classList.remove('abierta');
+    f.btn.setAttribute('aria-expanded', 'false');
+    f.panel.hidden = true;
   });
 }
 
+function nfSeccionesEmpleado(activo) {
+  const secEmp = document.getElementById('secEmpleado');
+  const secManual = document.getElementById('secManual');
+  if (secEmp) secEmp.style.display = activo ? 'block' : 'none';
+  if (secManual) secManual.style.display = activo ? 'none' : 'block';
+}
+
+// Mueve la grilla de productos al lugar correcto: resultados de búsqueda, categoría abierta o guardada oculta
+function nfPosicionarGrid() {
+  const grid = document.getElementById('productsGrid');
+  const holder = document.getElementById('gridHolder');
+  const host = document.getElementById('searchResultsHost');
+  if (!grid || !holder || !host) return;
+  const q = (document.getElementById('searchInput').value || '').trim();
+  if (q) { host.appendChild(grid); host.style.display = 'block'; }
+  else if (catActiva && _catFilas[catActiva]) { _catFilas[catActiva].panel.appendChild(grid); host.style.display = 'none'; }
+  else { holder.appendChild(grid); host.style.display = 'none'; }
+}
+
+function nfToggleCategoria(cat) {
+  const f = _catFilas[cat];
+  if (!f) return;
+  const estabaAbierta = f.wrap.classList.contains('abierta');
+  const sb = document.getElementById('searchInput');
+  if (sb) sb.value = '';
+  nfCerrarCategorias();
+  if (estabaAbierta) {
+    catActiva = '';
+  } else {
+    catActiva = cat;
+    f.wrap.classList.add('abierta');
+    f.btn.setAttribute('aria-expanded', 'true');
+    f.panel.hidden = false;
+  }
+  nfSeccionesEmpleado(!estabaAbierta && cat === 'EMPLEADOS');
+  nfPosicionarGrid();
+  renderProducts();
+  if (!estabaAbierta) setTimeout(() => f.btn.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+}
+
+function nfAlBuscar() {
+  const q = (document.getElementById('searchInput').value || '').trim();
+  if (q) { nfCerrarCategorias(); catActiva = ''; nfSeccionesEmpleado(false); }
+  nfPosicionarGrid();
+  renderProducts();
+}
+
+
+init();
+nfRestaurarEdicion();
 </script>
 
 
@@ -1687,20 +1908,9 @@ if (_btnGenerar) {
 
 
 
-<script>
 
 
 
-// ── GOL ANIMACIÓN AL GENERAR ─────────────────
-
-
-// Enganchar GOL al botón generar
-document.addEventListener('DOMContentLoaded', ()=>{
-  const btn = document.querySelector('.btn-generar');
-  if (btn) btn.addEventListener('click', ()=> setTimeout(mostrarGol, 500));
-});
-
-</script>
 
 
 
