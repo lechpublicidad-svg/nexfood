@@ -331,9 +331,10 @@ header span {
 .cat-row:active { background:var(--surf2); }
 .cat-row-name { flex:1; }
 .cat-row-count { min-width:26px; padding:2px 9px; border-radius:20px; background:var(--surf2); color:var(--muted); font-size:11px; font-weight:800; text-align:center; letter-spacing:0; }
-.cat-row-chev { font-size:14px; color:var(--gc); transition:transform .2s; }
+.cat-row-chev { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; width:24px; height:24px; border-radius:50%; font-size:12px; line-height:1; color:var(--gc); background:rgba(0,0,0,.05); background:color-mix(in srgb, var(--gc) 14%, #fff); transition:background .2s, color .2s; }
 .cat-item.abierta .cat-row { background:#FAFAFA; background:color-mix(in srgb, var(--gc) 9%, #fff); border-color:var(--gc); border-bottom-left-radius:0; border-bottom-right-radius:0; }
-.cat-item.abierta .cat-row-chev { transform:rotate(180deg); }
+.cat-item.abierta .cat-row-chev { background:var(--gc); color:#fff; transform:rotate(180deg); animation:nfFlechaAbierta 1.3s ease-in-out infinite; }
+@keyframes nfFlechaAbierta { 0%,100% { transform:translateY(2px) rotate(180deg); } 50% { transform:translateY(-3px) rotate(180deg); } }
 .cat-item.abierta .cat-row-count { background:var(--gc); color:#fff; }
 .cat-panel { padding:10px; background:#fff; border:1px solid var(--gc); border-left:5px solid var(--gc); border-top:none; border-radius:0 0 12px 12px; }
 .cat-panel[hidden] { display:none; }
@@ -342,6 +343,18 @@ header span {
 .search-results { padding:10px 14px 12px; background:var(--surf2); border-bottom:1px solid var(--border); }
 .search-results .products-grid { max-height:60vh; padding:0; }
 .products-grid:empty::before { content:'Sin resultados'; grid-column:1/-1; text-align:center; padding:12px; font-size:12px; color:var(--muted); }
+
+
+/* ═══ BUSCAR PRODUCTO — resaltado con movimiento leve ═══ */
+.buscar-label { display:inline-flex; align-items:center; gap:7px; margin-bottom:8px; padding:5px 12px; border-radius:20px; background:#FFEDD5; border:1.5px solid #FDBA74; color:#C2410C; font-size:13px; font-weight:800; letter-spacing:1px; text-transform:uppercase; }
+.bp-lupa { display:inline-block; transform-origin:60% 60%; animation:nfLupa 6s ease-in-out infinite; }
+@keyframes nfLupa { 0%,80%,100% { transform:rotate(0) scale(1); } 84% { transform:rotate(-18deg) scale(1.25); } 88% { transform:rotate(14deg) scale(1.25); } 92% { transform:rotate(-8deg) scale(1.12); } 96% { transform:rotate(0) scale(1); } }
+#searchInput { animation:nfBuscarBrillo 6s ease-in-out infinite; }
+@keyframes nfBuscarBrillo { 0%,78%,100% { box-shadow:0 0 0 0 rgba(249,115,22,0); } 86% { box-shadow:0 0 0 5px rgba(249,115,22,.38), 0 0 14px rgba(249,115,22,.35); } }
+#searchInput:focus, #searchInput:not(:placeholder-shown) { animation:none; }
+.search-box:focus-within .bp-lupa { animation:none; }
+.search-box:has(#searchInput:not(:placeholder-shown)) .bp-lupa { animation:none; }
+@media (prefers-reduced-motion: reduce) { .bp-lupa, #searchInput, .cat-item.abierta .cat-row-chev { animation:none; } }
 
 /* ═══ ÚLTIMAS 3 TIRILLAS ═══ */
 .ut-box { margin-top:16px; padding-top:14px; border-top:2px dashed var(--border); }
@@ -494,8 +507,11 @@ body::after  { content:none !important; }
 
     <!-- PEGAR DATOS -->
     <div class="section sec-cyan">
-      <div class="section-title" style="background:linear-gradient(135deg,#0369A1,#0EA5E9);">📋 Pegar Mensaje del Cliente</div>
-      <div class="section-body">
+      <div class="section-title" style="background:linear-gradient(135deg,#0369A1,#0EA5E9);cursor:pointer;" onclick="togglePegarMensaje()">
+        <span style="flex:1;">📋 Pegar Mensaje del Cliente</span>
+        <span id="pmArrow">▲</span>
+      </div>
+      <div class="section-body" id="pegarMensajeBody">
         <div class="form-group full">
           <label>Copia y pega el mensaje completo aquí</label>
           <textarea id="pasteBox" placeholder="Pega aquí el mensaje del cliente con todos sus datos y pedido. El sistema detectará automáticamente datos del cliente y productos."></textarea>
@@ -541,7 +557,7 @@ body::after  { content:none !important; }
     <!-- CARTA -->
     <div class="section sec-naranja">
       <div class="section-title" style="background:linear-gradient(135deg,#C2410C,#F97316);">🍽️ Carta de Productos</div>
-      <div class="search-box"><label style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#C2410C;font-weight:700;display:block;margin-bottom:6px;">🔍 Buscar Producto</label>
+      <div class="search-box"><label class="buscar-label" for="searchInput"><span class="bp-lupa">🔍</span> Buscar Producto</label>
 <input type="text" id="searchInput" placeholder="Escribe el nombre del producto..."></div>
       <div class="search-results" id="searchResultsHost" style="display:none;"></div>
       <div class="cat-tabs" id="catTabs"></div>
@@ -1897,8 +1913,35 @@ function nfAlBuscar() {
 }
 
 
+
+// ══════════════════════════════════════════════════════
+// PEGAR MENSAJE DEL CLIENTE — acordeón (recuerda cómo se dejó)
+// ══════════════════════════════════════════════════════
+function togglePegarMensaje() {
+  const body = document.getElementById('pegarMensajeBody');
+  const arrow = document.getElementById('pmArrow');
+  if (!body) return;
+  const visible = body.style.display !== 'none';
+  body.style.display = visible ? 'none' : 'block';
+  if (arrow) arrow.textContent = visible ? '▼' : '▲';
+  try { localStorage.setItem('nf_pegarAbierto', visible ? '0' : '1'); } catch(e) {}
+}
+
+function nfRestaurarPegarMensaje() {
+  let v = null;
+  try { v = localStorage.getItem('nf_pegarAbierto'); } catch(e) {}
+  if (v === '0') {
+    const body = document.getElementById('pegarMensajeBody');
+    const arrow = document.getElementById('pmArrow');
+    if (body) body.style.display = 'none';
+    if (arrow) arrow.textContent = '▼';
+  }
+}
+
+
 init();
 nfRestaurarEdicion();
+nfRestaurarPegarMensaje();
 </script>
 
 
