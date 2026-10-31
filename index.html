@@ -292,23 +292,18 @@ header span {
 .btn-emp { width:100% !important; padding:13px !important; background:linear-gradient(135deg,#065F46,#059669) !important; color:#fff !important; border:none !important; border-radius:8px !important; font-family:'Bebas Neue' !important; font-size:17px !important; letter-spacing:2px !important; cursor:pointer !important; margin-top:12px !important; display:block !important; box-shadow:0 4px 14px rgba(5,150,105,.35) !important; transition:all .2s !important; }
 .btn-emp:hover { background:linear-gradient(135deg,#059669,#065F46) !important; transform:translateY(-2px) !important; box-shadow:0 8px 20px rgba(5,150,105,.45) !important; }
 
-/* ── BUSCADOR CARTA ── */
+/* ── BUSCADOR CARTA — etiqueta y casilla siempre del mismo naranja ── */
+.search-box { --busca:#EA580C; --busca-luz:#FFF7ED; }
 #searchInput {
-  background: #EFF6FF !important;
-  border: 2px solid #3B82F6 !important;
-  color: #1E3A5F;
-  border-radius: 10px;
-  font-size: 14px;
-  padding: 11px 16px;
-  width: 100%;
-  transition: all .2s;
+  background:var(--busca-luz) !important;
+  border:3px solid var(--busca) !important;
+  color:#7C2D12; font-size:14px; font-weight:600;
+  border-radius:10px; padding:11px 16px; width:100%;
+  transition:box-shadow .2s, background .2s;
 }
-#searchInput:focus {
-  border-color: #1D4ED8 !important;
-  box-shadow: 0 0 0 3px rgba(59,130,246,.2) !important;
-  background: #DBEAFE !important;
-}
-#searchInput::placeholder { color: #6B8DB5; }
+#searchInput:not(:placeholder-shown) { border-color:var(--busca) !important; background:var(--busca-luz) !important; }
+#searchInput:focus { border-color:var(--busca) !important; background:#FFEDD5 !important; box-shadow:0 0 0 4px rgba(234,88,12,.30) !important; }
+#searchInput::placeholder { color:#9A4A1B; opacity:1; font-weight:500; }
 
 
 
@@ -346,11 +341,11 @@ header span {
 
 
 /* ═══ BUSCAR PRODUCTO — resaltado con movimiento leve ═══ */
-.buscar-label { display:inline-flex; align-items:center; gap:7px; margin-bottom:8px; padding:5px 12px; border-radius:20px; background:#FFEDD5; border:1.5px solid #FDBA74; color:#C2410C; font-size:13px; font-weight:800; letter-spacing:1px; text-transform:uppercase; }
+.buscar-label { display:inline-flex; align-items:center; gap:8px; margin-bottom:8px; padding:6px 14px; border-radius:20px; background:var(--busca,#EA580C); border:3px solid var(--busca,#EA580C); color:#fff; font-size:14px; font-weight:800; letter-spacing:1px; text-transform:uppercase; text-shadow:0 1px 2px rgba(0,0,0,.3); box-shadow:0 3px 8px rgba(234,88,12,.35); }
 .bp-lupa { display:inline-block; transform-origin:60% 60%; animation:nfLupa 6s ease-in-out infinite; }
 @keyframes nfLupa { 0%,80%,100% { transform:rotate(0) scale(1); } 84% { transform:rotate(-18deg) scale(1.25); } 88% { transform:rotate(14deg) scale(1.25); } 92% { transform:rotate(-8deg) scale(1.12); } 96% { transform:rotate(0) scale(1); } }
 #searchInput { animation:nfBuscarBrillo 6s ease-in-out infinite; }
-@keyframes nfBuscarBrillo { 0%,78%,100% { box-shadow:0 0 0 0 rgba(249,115,22,0); } 86% { box-shadow:0 0 0 5px rgba(249,115,22,.38), 0 0 14px rgba(249,115,22,.35); } }
+@keyframes nfBuscarBrillo { 0%,78%,100% { box-shadow:0 0 0 0 rgba(249,115,22,0); } 86% { box-shadow:0 0 0 5px rgba(234,88,12,.40), 0 0 14px rgba(234,88,12,.40); } }
 #searchInput:focus, #searchInput:not(:placeholder-shown) { animation:none; }
 .search-box:focus-within .bp-lupa { animation:none; }
 .search-box:has(#searchInput:not(:placeholder-shown)) .bp-lupa { animation:none; }
