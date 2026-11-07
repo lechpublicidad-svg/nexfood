@@ -337,9 +337,6 @@ header span {
 .cat-item.todo .cat-panel .products-grid { max-height:65vh; overflow-y:auto; }
 .search-results { padding:10px 14px 12px; background:var(--surf2); border-bottom:1px solid var(--border); }
 .search-results .products-grid { max-height:60vh; padding:0; }
-.products-grid:empty::before { content:'Sin resultados'; grid-column:1/-1; text-align:center; padding:12px; font-size:12px; color:var(--muted); }
-
-
 /* ═══ BUSCAR PRODUCTO — resaltado con movimiento leve ═══ */
 .buscar-label { display:inline-flex; align-items:center; gap:8px; margin-bottom:8px; padding:6px 14px; border-radius:20px; background:var(--busca,#EA580C); border:3px solid var(--busca,#EA580C); color:#fff; font-size:14px; font-weight:800; letter-spacing:1px; text-transform:uppercase; text-shadow:0 1px 2px rgba(0,0,0,.3); box-shadow:0 3px 8px rgba(234,88,12,.35); }
 .bp-lupa { display:inline-block; transform-origin:60% 60%; animation:nfLupa 6s ease-in-out infinite; }
@@ -350,6 +347,23 @@ header span {
 .search-box:focus-within .bp-lupa { animation:none; }
 .search-box:has(#searchInput:not(:placeholder-shown)) .bp-lupa { animation:none; }
 @media (prefers-reduced-motion: reduce) { .bp-lupa, #searchInput, .cat-item.abierta .cat-row-chev { animation:none; } }
+
+
+/* ═══ BUSCADOR PRINCIPAL + CATÁLOGO EN ACORDEÓN ═══ */
+.search-box.buscador-principal { padding:14px 16px 16px; background:linear-gradient(180deg,#FFF1E6,#fff); border-bottom:2px solid #FDBA74; }
+.buscador-principal .buscar-label { font-size:15px; padding:7px 16px; }
+.buscador-principal #searchInput { font-size:17px; padding:15px 18px; min-height:54px; }
+.cat-master-wrap { padding:12px 14px 4px; background:#fff; }
+.cat-master { --gc:#EA580C; width:100%; display:flex; align-items:center; gap:10px; padding:13px 14px; text-align:left; cursor:pointer; background:#fff; color:var(--text); border:1px solid var(--border); border-left:5px solid var(--gc); border-radius:12px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; scroll-margin-top:92px; -webkit-tap-highlight-color:transparent; }
+.cat-master-name { flex:1; }
+.cat-master.abierto { background:#FFF7ED; border-color:var(--gc); }
+.cat-master.abierto .cat-row-count { background:var(--gc); color:#fff; }
+.cat-master.abierto .cat-row-chev { background:var(--gc); color:#fff; transform:rotate(180deg); animation:nfFlechaAbierta 1.3s ease-in-out infinite; }
+#catalogoBody[hidden] { display:none; }
+.cat-master-wrap .cat-tabs.cat-acordeon { padding:6px 0 14px; background:transparent; }
+.sin-resultados { padding:12px 14px; margin-bottom:10px; background:#FFF7ED; border:2px dashed #EA580C; border-radius:12px; color:#7C2D12; font-size:13px; font-weight:700; line-height:1.45; }
+.sin-resultados .sr-btn { display:block; width:100%; margin-top:10px; padding:11px; border:none; border-radius:10px; background:linear-gradient(135deg,#4C1D95,#7C3AED); color:#fff; font-weight:800; font-size:13px; cursor:pointer; }
+@media (prefers-reduced-motion: reduce) { .cat-master.abierto .cat-row-chev { animation:none; } }
 
 /* ═══ ÚLTIMAS 3 TIRILLAS ═══ */
 .ut-box { margin-top:16px; padding-top:14px; border-top:2px dashed var(--border); }
@@ -552,10 +566,17 @@ body::after  { content:none !important; }
     <!-- CARTA -->
     <div class="section sec-naranja">
       <div class="section-title" style="background:linear-gradient(135deg,#C2410C,#F97316);">🍽️ Carta de Productos</div>
-      <div class="search-box"><label class="buscar-label" for="searchInput"><span class="bp-lupa">🔍</span> Buscar Producto</label>
-<input type="text" id="searchInput" placeholder="Escribe el nombre del producto..."></div>
-      <div class="search-results" id="searchResultsHost" style="display:none;"></div>
-      <div class="cat-tabs" id="catTabs"></div>
+      <div class="search-box buscador-principal"><label class="buscar-label" for="searchInput"><span class="bp-lupa">🔍</span> Buscar Producto</label>
+<input type="text" id="searchInput" placeholder="Escribe aquí para buscar un producto..." autocomplete="off"></div>
+      <div class="search-results" id="searchResultsHost" style="display:none;"><div class="sin-resultados" id="sinResultados" style="display:none;"></div></div>
+      <div class="cat-master-wrap">
+        <button type="button" class="cat-master" id="catMasterBtn" onclick="nfToggleCatalogo()" aria-expanded="false">
+          <span class="cat-master-name">📚 Ver catálogo por categorías</span>
+          <span class="cat-row-count" id="catMasterCount">0</span>
+          <span class="cat-row-chev">▾</span>
+        </button>
+        <div id="catalogoBody" hidden><div class="cat-tabs" id="catTabs"></div></div>
+      </div>
       <div id="gridHolder" style="display:none;"><div class="products-grid" id="productsGrid"></div></div>
     </div>
 
@@ -577,8 +598,11 @@ body::after  { content:none !important; }
 
     <!-- PRODUCTO MANUAL -->
     <div class="section sec-morado" id="secManual">
-      <div class="section-title" style="background:linear-gradient(135deg,#4C1D95,#7C3AED);">➕ Agregar Producto No Incluido en Carta</div>
-      <div class="section-body">
+      <div class="section-title" style="background:linear-gradient(135deg,#4C1D95,#7C3AED);cursor:pointer;" onclick="nfToggleManual()">
+        <span style="flex:1;">➕ Agregar Producto No Incluido en Carta</span>
+        <span id="mnArrow">▼</span>
+      </div>
+      <div class="section-body" id="manualBody" style="display:none;">
         <div class="manual-grid">
           <div class="form-group"><label>Nombre del Producto</label><input type="text" id="manualNombre" placeholder="Ej: Tortilla con bacon"></div>
           <div class="form-group"><label>Precio €</label><input type="number" id="manualPrecio" placeholder="0.00" step="0.01" min="0"></div>
@@ -1111,6 +1135,7 @@ function init() {
     tabsEl.appendChild(t);
     presentes.forEach(c => tabsEl.appendChild(crearFila(c, g.color, false)));
   });
+  const mc = document.getElementById('catMasterCount'); if (mc) mc.textContent = catalogo.length;
   nfPosicionarGrid();
 
   document.getElementById('searchInput').addEventListener('input', nfAlBuscar);
@@ -1214,6 +1239,7 @@ function agregarManual() {
   document.getElementById('manualPrecio').value = '';
   document.getElementById('manualQty').value = '1';
   renderOrder();
+  if (typeof nfPostAgregarManual === 'function') nfPostAgregarManual();
 }
 
 // ── PARSEAR DATOS ──
@@ -1885,6 +1911,7 @@ function nfToggleCategoria(cat) {
   const estabaAbierta = f.wrap.classList.contains('abierta');
   const sb = document.getElementById('searchInput');
   if (sb) sb.value = '';
+  nfSincronizarBusqueda('', true);
   nfCerrarCategorias();
   if (estabaAbierta) {
     catActiva = '';
@@ -1902,9 +1929,97 @@ function nfToggleCategoria(cat) {
 
 function nfAlBuscar() {
   const q = (document.getElementById('searchInput').value || '').trim();
-  if (q) { nfCerrarCategorias(); catActiva = ''; nfSeccionesEmpleado(false); }
+  if (q) { nfCerrarCategorias(); catActiva = ''; nfSeccionesEmpleado(false); nfCerrarCatalogoUI(); }
   nfPosicionarGrid();
   renderProducts();
+  const hay = document.querySelectorAll('#productsGrid .product-card').length > 0;
+  nfSincronizarBusqueda(q, hay);
+}
+
+// ── Catálogo por categorías: acordeón maestro (siempre cerrado al abrir la app) ──
+function nfCerrarCatalogoUI() {
+  const body = document.getElementById('catalogoBody');
+  const btn = document.getElementById('catMasterBtn');
+  if (body) body.hidden = true;
+  if (btn) { btn.classList.remove('abierto'); btn.setAttribute('aria-expanded', 'false'); }
+}
+
+function nfToggleCatalogo() {
+  const body = document.getElementById('catalogoBody');
+  const btn = document.getElementById('catMasterBtn');
+  if (!body || !btn) return;
+  if (body.hidden) {
+    const sb = document.getElementById('searchInput');
+    if (sb) sb.value = '';
+    body.hidden = false;
+    btn.classList.add('abierto');
+    btn.setAttribute('aria-expanded', 'true');
+    nfSincronizarBusqueda('', true);
+    nfPosicionarGrid();
+    renderProducts();
+    setTimeout(() => btn.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  } else {
+    nfCerrarCatalogoUI();
+    nfCerrarCategorias(); catActiva = ''; nfSeccionesEmpleado(false);
+    nfPosicionarGrid();
+    renderProducts();
+  }
+}
+
+// ── "Agregar producto no incluido": acordeón que se abre solo si la búsqueda no encuentra nada ──
+let _manualAutoAbierto = false;
+let _manualNombreAuto = '';
+
+function nfManualAbierto() { const b = document.getElementById('manualBody'); return !!b && b.style.display !== 'none'; }
+function nfAbrirManual() { const b = document.getElementById('manualBody'), a = document.getElementById('mnArrow'); if (b) b.style.display = 'block'; if (a) a.textContent = '▲'; }
+function nfCerrarManual() { const b = document.getElementById('manualBody'), a = document.getElementById('mnArrow'); if (b) b.style.display = 'none'; if (a) a.textContent = '▼'; }
+function nfToggleManual() {
+  if (nfManualAbierto()) nfCerrarManual(); else nfAbrirManual();
+  _manualAutoAbierto = false;   // lo decidió el operador: no se cierra solo
+}
+
+function nfIrAManual() {
+  const sec = document.getElementById('secManual');
+  if (!sec) return;
+  sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => { const pr = document.getElementById('manualPrecio'); if (pr) pr.focus(); }, 450);
+}
+
+function nfSincronizarBusqueda(q, hayResultados) {
+  const aviso = document.getElementById('sinResultados');
+  const nombreEl = document.getElementById('manualNombre');
+  if (q && !hayResultados) {
+    if (aviso) {
+      aviso.style.display = 'block';
+      aviso.innerHTML = '';
+      const t1 = document.createElement('div');
+      t1.textContent = '🔎 No encontré “' + q + '” en el catálogo.';
+      const t2 = document.createElement('div');
+      t2.style.fontWeight = '600'; t2.style.marginTop = '4px';
+      t2.textContent = '➕ Se abrió “Agregar producto no incluido” con el nombre ya escrito. Falta el precio y la cantidad.';
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'sr-btn'; btn.textContent = '➕ Ir a agregarlo';
+      btn.onclick = nfIrAManual;
+      aviso.appendChild(t1); aviso.appendChild(t2); aviso.appendChild(btn);
+    }
+    if (!nfManualAbierto()) { nfAbrirManual(); _manualAutoAbierto = true; }
+    if (nombreEl && (nombreEl.value.trim() === '' || nombreEl.value === _manualNombreAuto)) { nombreEl.value = q; _manualNombreAuto = q; }
+  } else {
+    if (aviso) { aviso.style.display = 'none'; aviso.innerHTML = ''; }
+    if (_manualAutoAbierto) { nfCerrarManual(); _manualAutoAbierto = false; }
+    if (nombreEl && _manualNombreAuto && nombreEl.value === _manualNombreAuto) nombreEl.value = '';
+    _manualNombreAuto = '';
+  }
+}
+
+// Tras agregar el producto manual desde una búsqueda sin resultados: limpiar la búsqueda
+function nfPostAgregarManual() {
+  const aviso = document.getElementById('sinResultados');
+  if (aviso && aviso.style.display !== 'none') {
+    const sb = document.getElementById('searchInput');
+    if (sb) sb.value = '';
+    nfAlBuscar();
+  }
 }
 
 
